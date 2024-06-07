@@ -40,6 +40,4 @@ public class Proveedor {
 
     @Column(name = "promedio_puntuación")
     private Integer promPuntuacion;
-
-    private boolean alta;
 }

@@ -25,6 +25,4 @@ public class Cliente {
 
     @Column(name ="id_pedidos")
     private List<Pedido> pedidos;
-
-    private boolean alta;
 }

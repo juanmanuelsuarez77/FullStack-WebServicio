@@ -25,15 +25,12 @@ public class Usuario {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Rol rol;
-
-    // @ManyToOne
-    // @JoinColumn(name ="id_barrio")
-    // private Barrio barrio;
-
-    @Enumerated(EnumType.STRING)
     private Barrio barrio;
-    
     private String direccion;
     private String telefono;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;    
+
+    private boolean alta;
 }
