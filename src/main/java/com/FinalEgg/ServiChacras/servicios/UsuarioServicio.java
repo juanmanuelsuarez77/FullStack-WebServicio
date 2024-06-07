@@ -28,13 +28,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class UsuarioServicio implements UserDetailsService {
-
+    private static final Rol NULL = null;
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
-
     @Autowired
     ClienteRepositorio clienteRepositorio;
-
     @Autowired
     ProveedorRepositorio proveedorRepositorio;
 
@@ -60,12 +58,8 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setDireccion(direccion);
         usuario.setTelefono(telefono);
 
-        if (barrio != null) { usuario.setRol(com.FinalEgg.ServiChacras.enumeraciones.Rol.INVITADO); }
-        else {
-            Rol rol = Rol.valueOf(rolString.toUpperCase());
-            usuario.setRol(rol);
-        }
-        
+        Rol rol = Rol.valueOf(rolString.toUpperCase());
+        usuario.setRol(rol);
         usuario.setAlta(true);
 
         usuarioRepositorio.save(usuario);
@@ -160,11 +154,8 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setDireccion(direccion);
             usuario.setTelefono(telefono);
 
-            if (barrio != null) { usuario.setRol(com.FinalEgg.ServiChacras.enumeraciones.Rol.INVITADO); }
-            else {
-                Rol rol = Rol.valueOf(rolString.toUpperCase());
-                usuario.setRol(rol);
-            }         
+            Rol rol = Rol.valueOf(rolString.toUpperCase());
+            usuario.setRol(rol);      
 
             usuarioRepositorio.save(usuario);
             definirUsuario(usuario, 1);
@@ -173,15 +164,12 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void cambiarRol(String id) throws MiExcepcion {
-
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
-
             Usuario usuario = respuesta.get();
 
             if(!usuario.getRol().equals(Rol.ADMIN)) { usuario.setRol(Rol.ADMIN); }
-            else { usuario.setRol(Rol.INVITADO); }
 
             usuarioRepositorio.save(usuario);
         }
@@ -198,7 +186,6 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
 
         if (usuario != null) {
@@ -215,9 +202,6 @@ public class UsuarioServicio implements UserDetailsService {
         }else{ return null; }
     }
 
-    @Transactional(readOnly = true)
-    public Usuario getOne(String id) { return usuarioRepositorio.getOne(id); }
-
     @Transactional
     public void eliminarUsuario(String id) { 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -227,4 +211,16 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setAlta(false); 
         }
     }
+
+    @Transactional(readOnly = true)
+    public Usuario getOne(String id) { return usuarioRepositorio.getOne(id); }
+
+    @Transactional(readOnly = true)
+    public Usuario getPorEmail(String email) { return usuarioRepositorio.buscarPorEmail(email); }
+
+    @Transactional(readOnly = true)
+    public List<Object> getClientes() { return usuarioRepositorio.getClientes(); }
+
+    @Transactional(readOnly = true)
+    public List<Object> getProveedores() { return usuarioRepositorio.getProveedores(); }
 }

@@ -25,6 +25,7 @@ public class ClienteServicio {
     @Transactional(readOnly = true)
     public List<Cliente> listarClientes() { return clienteRepositorio.findAll(); }
 
+    @Transactional
     public void actualizar(String id, String nombre, String apellido, String email, String password, String password2, Integer barrio, String rolString, String direccion, String telefono) throws MiExcepcion {
         Optional<Cliente> optionalCliente = clienteRepositorio.findById(id);
 
@@ -40,5 +41,18 @@ public class ClienteServicio {
         });
     }
 
+    @Transactional(readOnly = true)
     public Cliente getOne(String id) { return clienteRepositorio.getOne(id); }
+
+    @Transactional(readOnly = true)
+    public Cliente getPorEmail(String email) { return clienteRepositorio.getPorEmail(email); }
+
+    @Transactional(readOnly = true)
+    public List<Cliente> getPorDireccion(String barrio, String direccion) { return clienteRepositorio.getPorDireccion(barrio, direccion); }
+
+    @Transactional(readOnly = true)
+    public Cliente getPorPedido(String id) { return clienteRepositorio.getPorPedido(id); }
+
+    @Transactional(readOnly = true)
+    public List<Object> getComentarios(String id) { return clienteRepositorio.getComentarios(id); }
 }

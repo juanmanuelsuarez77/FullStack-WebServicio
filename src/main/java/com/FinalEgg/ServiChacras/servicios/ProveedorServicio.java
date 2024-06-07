@@ -1,9 +1,6 @@
 package com.FinalEgg.ServiChacras.servicios;
 
-import com.FinalEgg.ServiChacras.entidades.Imagen;
-import com.FinalEgg.ServiChacras.entidades.Usuario;
-import com.FinalEgg.ServiChacras.entidades.Servicio;
-import com.FinalEgg.ServiChacras.entidades.Proveedor;
+import com.FinalEgg.ServiChacras.entidades.*;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
@@ -20,7 +17,6 @@ public class ProveedorServicio {
     private ProveedorRepositorio proveedorRepositorio;
     @Autowired
     private ServicioRepositorio servicioRepositorio;
-
     @Autowired
     ImagenServicio imagenServicio;
 
@@ -38,9 +34,7 @@ public class ProveedorServicio {
         Optional<Servicio> opcionalServicio = servicioRepositorio.findById(idServicio);
         Servicio servicio = new Servicio();
 
-        if (opcionalServicio.isPresent()) { 
-            servicio = opcionalServicio.get(); 
-        }
+        if (opcionalServicio.isPresent()) { servicio = opcionalServicio.get(); }
         proveedor.setServicio(servicio);
 
         proveedorRepositorio.save(proveedor);
@@ -49,6 +43,7 @@ public class ProveedorServicio {
     @Transactional(readOnly = true)
     public List<Proveedor> listarProveedors() { return proveedorRepositorio.findAll(); }
 
+    @Transactional
     public void actualizar(String id, MultipartFile archivo, Usuario usuario, String descripcion, String idServicio) throws MiExcepcion {
         Optional<Proveedor> optionalProveedor = proveedorRepositorio.findById(id);
 
@@ -65,14 +60,28 @@ public class ProveedorServicio {
             Optional<Servicio> opcionalServicio = servicioRepositorio.findById(idServicio);
             Servicio servicio = new Servicio();
 
-            if (opcionalServicio.isPresent()) {
-                servicio = opcionalServicio.get();
-            }
+            if (opcionalServicio.isPresent()) { servicio = opcionalServicio.get(); }
             proveedor.setServicio(servicio);
 
             proveedorRepositorio.save(proveedor);
         });
     }
 
+    @Transactional(readOnly = true)
     public Proveedor getOne(String id) { return proveedorRepositorio.getOne(id); }
+
+    @Transactional(readOnly = true)
+    public Proveedor getPorEmail(String email) { return proveedorRepositorio.getPorEmail(email); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorDireccion(String barrio, String direccion) { return proveedorRepositorio.getPorDireccion(barrio, direccion); }
+
+    @Transactional(readOnly = true)
+    public Proveedor getPorPedido(String id) { return proveedorRepositorio.getPorPedido(id); }
+
+    @Transactional(readOnly = true)
+    public List<Object> getComentarios(String id) { return proveedorRepositorio.getComentarios(id); }
+
+    @Transactional(readOnly = true)
+    public List<Object> getPuntuaciones(String id) { return proveedorRepositorio.getPuntuaciones(id); }
 }

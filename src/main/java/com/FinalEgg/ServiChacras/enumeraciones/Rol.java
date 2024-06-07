@@ -5,5 +5,4 @@ public enum Rol {
     CLIENTE,
     PROVEEDOR,
     MIXTO,
-    INVITADO;
 }

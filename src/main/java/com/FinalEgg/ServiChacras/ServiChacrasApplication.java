@@ -5,9 +5,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ServiChacrasApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(ServiChacrasApplication.class, args);
-	}
-
+	public static void main(String[] args) { SpringApplication.run(ServiChacrasApplication.class, args); }
 }
