@@ -10,7 +10,7 @@ import com.FinalEgg.ServiChacras.entidades.Pedido;
 
 @Repository
 public interface PedidoRepositorio extends JpaRepository<Pedido, String> {
-    @Query("SELECT p.puntuacion FROM pedido p WHERE p.id = :idPedido")
+    @Query("SELECT p.puntuacion FROM Pedido p WHERE p.id = :idPedido")
     public Integer puntuacionPorPedido(@Param("idPedido") String idPedido);
 
     @Query("SELECT p.id AS pedido, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente, p.estado FROM Pedido p WHERE p.cliente.id = :idCliente")

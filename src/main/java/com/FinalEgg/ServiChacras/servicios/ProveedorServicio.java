@@ -5,6 +5,7 @@ import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProveedorServicio {
     @Autowired
     private ProveedorRepositorio proveedorRepositorio;
     @Autowired
     private ServicioRepositorio servicioRepositorio;
     @Autowired
-    ImagenServicio imagenServicio;
+    private ImagenServicio imagenServicio;
 
     @Transactional
-    public void crearProveedor(MultipartFile archivo, Usuario usuario, String descripcion, String idServicio) throws MiExcepcion {
+    public void crearProveedor(Usuario usuario, MultipartFile archivo, String descripcion, String idServicio) throws MiExcepcion {
         Proveedor proveedor = new Proveedor();
 
         proveedor.setUsuario(usuario);
@@ -44,7 +46,7 @@ public class ProveedorServicio {
     public List<Proveedor> listarProveedors() { return proveedorRepositorio.findAll(); }
 
     @Transactional
-    public void actualizar(String id, MultipartFile archivo, Usuario usuario, String descripcion, String idServicio) throws MiExcepcion {
+    public void actualizar(String id, Usuario usuario, MultipartFile archivo, String descripcion, String idServicio) throws MiExcepcion {
         Optional<Proveedor> optionalProveedor = proveedorRepositorio.findById(id);
 
         optionalProveedor.ifPresent(proveedor -> {
@@ -69,6 +71,9 @@ public class ProveedorServicio {
 
     @Transactional(readOnly = true)
     public Proveedor getOne(String id) { return proveedorRepositorio.getOne(id); }
+
+     @Transactional(readOnly = true)
+    public String idUsuario(String idUsuario) { return proveedorRepositorio.idUsuario(idUsuario); }
 
     @Transactional(readOnly = true)
     public Proveedor getPorEmail(String email) { return proveedorRepositorio.getPorEmail(email); }

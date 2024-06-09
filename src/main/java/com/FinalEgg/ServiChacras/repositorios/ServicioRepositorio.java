@@ -13,6 +13,6 @@ public interface ServicioRepositorio extends JpaRepository<Servicio, String> {
     @Query("SELECT p.servicio.nombre AS servicio, CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor, p.servicio.detalle FROM Proveedor p WHERE p.id = :idProveedor")
     public List<Object> getServicioPorProveedores(@Param("idProveedor") String idProveedor);
 
-    @Query("SELECT p.id AS pedido, p.servicio.nombre AS servicio, CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor, p.servicio.detalle, p.estado FROM Pedido p WHERE p.id = :idPedido")
+    @Query("SELECT p.id AS pedido, p.servicio.nombre AS servicio, CONCAT(p.proveedor.usuario.nombre, ' ', p.proveedor.usuario.apellido) AS proveedor, p.servicio.detalle, p.estado FROM Pedido p WHERE p.id = :idPedido")
     public List<Object> getServicioPorPedido(@Param("idPedido") String idPedido);
 }

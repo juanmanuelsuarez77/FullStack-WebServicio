@@ -3,18 +3,18 @@ package com.FinalEgg.ServiChacras.servicios;
 import com.FinalEgg.ServiChacras.entidades.*;
 import com.FinalEgg.ServiChacras.enumeraciones.Estado;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import com.FinalEgg.ServiChacras.repositorios.PagoRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ClienteRepositorio;
-import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.PagoRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PagoServicio {
     @Autowired
     private PagoRepositorio pagoRepositorio;

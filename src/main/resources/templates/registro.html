@@ -35,14 +35,17 @@
         </div>
     </nav>
 
-
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
+
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
                         <h3>Registrate en nuestra página!</h3>
                     </div>
+
+                    <div th:replace= "~{/fragments/divError :: div}"> </div>
+
                     <div class="card-body">
                         <form class="formulario" th:action="@{/registro}" method="POST" enctype="multipart/form-data">
                             <div class="form-group my-3">
@@ -97,47 +100,26 @@
                                 </div>
                             </div>
 
-                            <div class="form-group my-3" id="tipoServicio" style="display: none;">
+                            <div class="form-group my-3" id="tipoServicio" style="display: none;">                                
+                                <div class="form-group my-3">
+                                    <input type="file" class="form-control-file" name="archivo">
+                                </div>
+
                                 <label for="servicio">¿Qué tipo de servicio ofrece?</label>
                                 <select class="form-control" name="servicio" id="servicio">
                                     <option value="" disabled selected>Seleccione un servicio</option>
-                                    <optgroup label="Servicios de limpieza">
-                                        <option value="limpieza-interiores">Limpieza de interiores</option>
-                                        <option value="lavado-plancha">Lavado y planchado de ropa</option>
-                                        <option value="limpieza-ventanas">Limpieza de ventanas</option>
-                                        <option value="limpieza-profunda">Limpieza profunda de la casa</option>
-                                    </optgroup>
-                                    <optgroup label="Servicios de mantenimiento y reparaciones">
-                                        <option value="electricidad">Electricidad</option>
-                                        <option value="plomeria">Plomería</option>
-                                        <option value="carpinteria">Carpintería</option>
-                                        <option value="jardineria">Jardinería y cuidado del jardín</option>
-                                        <option value="pintura">Pintura y decoración</option>
-                                    </optgroup>
-                                    <optgroup label="Servicios de seguridad">
-                                        <option value="seguridad-instalacion">Instalación y monitoreo de sistemas de
-                                            seguridad</option>
-                                        <option value="vigilancia">Vigilancia y patrullaje</option>
-                                        <option value="atencion-emergencias">Atención a emergencias</option>
-                                    </optgroup>
-                                    <optgroup label="Servicios de tecnología y conectividad">
-                                        <option value="instalacion-electronicos">Instalación y configuración de equipos
-                                            electrónicos</option>
-                                        <option value="soporte-tecnico">Soporte técnico y solución de problemas</option>
-                                        <option value="internet-tv">Servicios de internet y televisión</option>
-                                    </optgroup>
-                                    <optgroup label="Servicios de cuidado personal y bienestar">
-                                        <option value="cuidado-mascotas">Cuidado de mascotas</option>
-                                        <option value="cuidado-ninos">Cuidado de niños</option>
-                                        <option value="salud-bienestar">Servicios de salud y bienestar</option>
-                                    </optgroup>
-                                    <optgroup label="Servicios de entrega y logística">
-                                        <option value="entrega-comida">Entrega de comida y compras</option>
-                                        <option value="entrega-paquetes">Entrega de paquetes</option>
-                                        <option value="transporte-mudanzas">Transporte y mudanzas</option>
-                                    </optgroup>
+                                    <option class="opcion" th:each="servicio : ${servicios}"
+                                            th:value="${servicio.id}"
+                                            th:text="${servicio.nombre}">
+                                        <span></span>
+                                    </option>
                                 </select>
-                            </div>
+
+                                <div data-mdb-input-init class="form-outline">
+                                    <textarea class="form-control" id="descripcion" rows="4" th:value="${descripcion}"></textarea>
+                                    <label class="form-label" for="descripcion">Message</label>
+                                </div>
+                            </div>            
 
                             <button type="submit" class="btn btn-primary">Registrarme</button>
                         </form>
@@ -181,27 +163,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var clienteRadio = document.getElementById('cliente');
-            var proveedorRadio = document.getElementById('proveedor');
-            var mixtoRadio = document.getElementById('mixto');
-            var tipoServicioDiv = document.getElementById('tipoServicio');
-
-            function toggleTipoServicio() {
-                if (proveedorRadio.checked || mixtoRadio.checked) {
-                    tipoServicioDiv.style.display = 'block';
-                } else {
-                    tipoServicioDiv.style.display = 'none';
-                }
-            }
-            clienteRadio.addEventListener('change', toggleTipoServicio);
-            proveedorRadio.addEventListener('change', toggleTipoServicio);
-            mixtoRadio.addEventListener('change', toggleTipoServicio);
-            toggleTipoServicio();
-        });
-    </script>
-
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

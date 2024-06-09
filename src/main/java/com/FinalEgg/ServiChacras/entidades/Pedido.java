@@ -20,7 +20,7 @@ public class Pedido {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name ="id_cliente")
+    @JoinColumn(name ="id-cliente")
     private Cliente cliente;
 
     @ManyToOne
@@ -40,4 +40,5 @@ public class Pedido {
 
     private String comentario;
     private Integer puntuacion;
+    private boolean alta;
 }

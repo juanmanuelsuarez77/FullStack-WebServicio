@@ -10,7 +10,7 @@ import com.FinalEgg.ServiChacras.entidades.Pago;
 
 @Repository
 public interface PagoRepositorio extends JpaRepository<Pago, String> {
-    @Query("SELECT p.id AS pago, p.valor FROM pago p WHERE p.id = :idPago")
+    @Query("SELECT p.id AS pago, p.valor FROM Pago p WHERE p.id = :idPago")
     public Integer puntuacionPorPago(@Param("idPago") String idPago);
 
     @Query("SELECT p.id AS pago, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente, p.estado, p.valor FROM Pago p WHERE p.cliente.id = :idCliente")

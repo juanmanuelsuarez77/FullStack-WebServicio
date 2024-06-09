@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,22 @@ import com.FinalEgg.ServiChacras.enumeraciones.Barrio;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsuarioServicio implements UserDetailsService {
-    private static final Rol NULL = null;
     @Autowired
-    UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepositorio usuarioRepositorio;
     @Autowired
-    ClienteRepositorio clienteRepositorio;
+    private ClienteRepositorio clienteRepositorio;
     @Autowired
-    ProveedorRepositorio proveedorRepositorio;
+    private ProveedorRepositorio proveedorRepositorio;
+    @Autowired
+    private ClienteServicio clienteServicio;
+    @Autowired
+    private ProveedorServicio proveedorServicio;
+    @Autowired
+    private ServicioRepositorio servicioRepositorio;
 
     @Transactional
     public void registrar(String nombre, String apellido, String email, String password, String password2, Integer barrio, String rolString, String direccion, String telefono) throws MiExcepcion {
@@ -61,69 +68,50 @@ public class UsuarioServicio implements UserDetailsService {
         Rol rol = Rol.valueOf(rolString.toUpperCase());
         usuario.setRol(rol);
         usuario.setAlta(true);
-
+        
         usuarioRepositorio.save(usuario);
-        definirUsuario(usuario, 0);
+        if(rolString.toUpperCase().equals("CLIENTE")){ definirCliente(usuario, 0); }
     }
 
     @Transactional
-    public void definirUsuario(Usuario usuario, Integer num) throws MiExcepcion {
+    public void definirCliente(Usuario usuario, Integer num) throws MiExcepcion {
         String rol = String.valueOf(usuario.getRol());
 
-        ClienteServicio clienteServicio = new ClienteServicio();
-        ProveedorServicio proveedorServicio = new ProveedorServicio();
+        if (num == 0) { clienteServicio.crearCliente(usuario); }
+        else {
+            Optional<Cliente> opcionalCliente = clienteRepositorio.findById(clienteRepositorio.idUsuario(usuario.getId()));
+            Optional<Proveedor> opcionalProveedor = proveedorRepositorio.findById(proveedorRepositorio.idUsuario(usuario.getId()));
+
+            if (!opcionalCliente.isPresent()) { clienteServicio.crearCliente(usuario); }
+            opcionalProveedor.ifPresent(proveedor -> { proveedorRepositorio.deleteById(proveedor.getId()); });
+        }
+    }
+            
+    @Transactional
+    public void definirMixto(Usuario usuario, MultipartFile archivo, String descripcion, String idServicio, Integer num) throws MiExcepcion {
+        String rol = String.valueOf(usuario.getRol());
 
         if (num == 0) {
-            switch (rol) {
-                case "CLIENTE" -> { clienteServicio.crearCliente(usuario); }
-                case "PROVEEDOR" -> { proveedorServicio.crearProveedor(null, usuario, null, null); }
-                case "MIXTO" -> { 
-                    clienteServicio.crearCliente(usuario);
-                    proveedorServicio.crearProveedor(null, usuario, null, null);
-                }
-            }
+            if(usuario.getRol().equals("MIXTO")) { clienteServicio.crearCliente(usuario); }
+            proveedorServicio.crearProveedor(usuario, archivo, descripcion, idServicio);
 
         } else {
             Optional<Cliente> opcionalCliente = clienteRepositorio.findById(clienteRepositorio.idUsuario(usuario.getId()));
             Optional<Proveedor> opcionalProveedor = proveedorRepositorio.findById(proveedorRepositorio.idUsuario(usuario.getId()));
 
-            switch (rol) {
-                case "CLIENTE" -> {
-                    if (opcionalProveedor.isPresent()) {
-                        Proveedor proveedor = opcionalProveedor.get();
-                        proveedorRepositorio.deleteById(proveedor.getId());
-
-                        if (opcionalCliente.isPresent()) { break; }
-                        else { clienteServicio.crearCliente(usuario); }
-
-                    } else if (opcionalCliente.isPresent()) { break; }
-                }
+            switch (rol) {                
                 case "PROVEEDOR" -> {
-                    if (opcionalCliente.isPresent()) {
-                        Cliente cliente = opcionalCliente.get();
-                        clienteRepositorio.deleteById(cliente.getId());
-                        
-                        if (opcionalProveedor.isPresent()) { break; }
-                        else { proveedorServicio.crearProveedor(null, usuario, null, null); }
-
-                    } else if (opcionalProveedor.isPresent()) { break; }
+                    opcionalCliente.ifPresent(cliente -> { clienteRepositorio.deleteById(cliente.getId()); });
+                    if (!opcionalProveedor.isPresent()) { proveedorServicio.crearProveedor(usuario, archivo, descripcion, idServicio); }
                 }
                 case "MIXTO" -> {
-                    if (opcionalCliente.isPresent()) {
-                        if (opcionalProveedor.isPresent()) { break; }
-                        else { proveedorServicio.crearProveedor(null, usuario, null, null); }
-
-                    } else {
-                        clienteServicio.crearCliente(usuario);
-
-                        if (opcionalProveedor.isPresent()) { break; }
-                        else { proveedorServicio.crearProveedor(null, usuario, null, null); }
-                    }
+                    if (!opcionalCliente.isPresent()) { clienteServicio.crearCliente(usuario); }
+                    if (!opcionalProveedor.isPresent()) { proveedorServicio.crearProveedor(usuario, archivo, descripcion, idServicio); }
                 }
             }
-        }        
-    }
-
+        }
+    }         
+    
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() { return usuarioRepositorio.findAll();}
 
@@ -148,6 +136,7 @@ public class UsuarioServicio implements UserDetailsService {
                     case 1 -> { usuario.setBarrio(Barrio.BARRIO1Ruta2km69); }
                     case 2 -> { usuario.setBarrio(Barrio.BARRIO2Ruta2km75); }
                     case 3 -> { usuario.setBarrio(Barrio.BARRIO3Ruta13km86); }
+                    default -> { usuario.setBarrio(Barrio.FORANEO); }
                 }
             } else { usuario.setBarrio(Barrio.FORANEO); }
 
@@ -158,7 +147,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setRol(rol);      
 
             usuarioRepositorio.save(usuario);
-            definirUsuario(usuario, 1);
+            definirCliente(usuario, 1);
         }
     }
 
@@ -217,6 +206,9 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Usuario getPorEmail(String email) { return usuarioRepositorio.buscarPorEmail(email); }
+
+    @Transactional(readOnly = true)
+    public String getIdPorEmail(String email) { return usuarioRepositorio.getIdPorEmail(email); }
 
     @Transactional(readOnly = true)
     public List<Object> getClientes() { return usuarioRepositorio.getClientes(); }

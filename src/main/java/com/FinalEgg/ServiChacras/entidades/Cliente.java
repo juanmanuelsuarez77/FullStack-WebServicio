@@ -23,6 +23,6 @@ public class Cliente {
     @JoinColumn(name ="id_usuario")
     private Usuario usuario;
 
-    @Column(name ="id_pedidos")
+    @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 }

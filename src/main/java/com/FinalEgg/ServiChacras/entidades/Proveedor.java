@@ -32,7 +32,7 @@ public class Proveedor {
     @JoinColumn(name ="id_servicio")
     private Servicio servicio;
 
-    @Column(name ="id_pedidos")
+    @OneToMany(mappedBy = "proveedor")
     private List<Pedido> pedidos;
 
     @Column(name = "cantidad_pedidos")

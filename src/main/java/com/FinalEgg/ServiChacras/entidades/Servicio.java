@@ -15,6 +15,7 @@ public class Servicio {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name ="uuid", strategy = "uuid2")
     private String id;
+    @Column(unique = true)
     private String nombre;
     private String detalle;
 }

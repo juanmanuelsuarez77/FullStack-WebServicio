@@ -8,6 +8,7 @@ import com.FinalEgg.ServiChacras.repositorios.ClienteRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PedidoServicio {
     @Autowired
     private PedidoRepositorio pedidoRepositorio;
@@ -51,6 +53,7 @@ public class PedidoServicio {
         pedido.setProveedor(proveedor);
         pedido.setFechaPedido(new Date());
         pedido.setEstado(Estado.PENDIENTE);
+        pedido.setAlta(true);
     }
 
     @Transactional(readOnly = true)
@@ -68,8 +71,21 @@ public class PedidoServicio {
         });
     }
 
+    @Transactional
+    public void cancelarPedido(String id) { 
+        Optional<Pedido> respuesta = pedidoRepositorio.findById(id);
+
+        if (respuesta.isPresent()) {
+            Pedido pedido = respuesta.get();
+            pedido.setAlta(false); 
+        }
+    }
+
     @Transactional(readOnly = true)
     public Pedido getOne(String id) { return pedidoRepositorio.getOne(id); }
+
+    @Transactional(readOnly = true)
+    public Integer puntuacionPorPedido(String id) { return pedidoRepositorio.puntuacionPorPedido(id); }
 
     @Transactional(readOnly = true)
     public List<Object> getPedidoPorClientes(String id) { return pedidoRepositorio.getPedidoPorClientes(id); }

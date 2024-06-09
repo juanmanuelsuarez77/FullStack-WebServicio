@@ -1,16 +1,18 @@
 package com.FinalEgg.ServiChacras.servicios;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.FinalEgg.ServiChacras.entidades.Cliente;
 import com.FinalEgg.ServiChacras.entidades.Usuario;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import com.FinalEgg.ServiChacras.repositorios.ClienteRepositorio;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
+@Service
 public class ClienteServicio {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
@@ -19,6 +21,7 @@ public class ClienteServicio {
     public void crearCliente(Usuario usuario) throws MiExcepcion {
         Cliente cliente = new Cliente();
         cliente.setUsuario(usuario);
+        System.out.println("dentro de clienteRepositorio");
         clienteRepositorio.save(cliente);
     }
 
