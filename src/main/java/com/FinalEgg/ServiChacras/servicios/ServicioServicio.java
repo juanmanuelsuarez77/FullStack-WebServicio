@@ -46,4 +46,7 @@ public class ServicioServicio {
 
     @Transactional(readOnly = true)
     public List<Object> getServicioPorPedido(String id) { return servicioRepositorio.getServicioPorPedido(id); }
+
+    @Transactional(readOnly = true)
+    public List<Servicio> listarPorCategoria(String categoria) { return servicioRepositorio.listarPorCategoria(categoria); }
 }

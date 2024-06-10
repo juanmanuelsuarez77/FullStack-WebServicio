@@ -65,8 +65,10 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setDireccion(direccion);
         usuario.setTelefono(telefono);
 
-        Rol rol = Rol.valueOf(rolString.toUpperCase());
-        usuario.setRol(rol);
+        if (!rolString.equals("")) {
+            Rol rol = Rol.valueOf(rolString.toUpperCase());
+            usuario.setRol(rol);
+        }
         usuario.setAlta(true);
         
         usuarioRepositorio.save(usuario);
@@ -75,8 +77,6 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void definirCliente(Usuario usuario, Integer num) throws MiExcepcion {
-        String rol = String.valueOf(usuario.getRol());
-
         if (num == 0) { clienteServicio.crearCliente(usuario); }
         else {
             Optional<Cliente> opcionalCliente = clienteRepositorio.findById(clienteRepositorio.idUsuario(usuario.getId()));
@@ -92,8 +92,9 @@ public class UsuarioServicio implements UserDetailsService {
         String rol = String.valueOf(usuario.getRol());
 
         if (num == 0) {
-            if(usuario.getRol().equals("MIXTO")) { clienteServicio.crearCliente(usuario); }
+            if(rol.equals("MIXTO")) { clienteServicio.crearCliente(usuario); }
             proveedorServicio.crearProveedor(usuario, archivo, descripcion, idServicio);
+            System.out.println("salio de crearProveedor en proveedorServicio");
 
         } else {
             Optional<Cliente> opcionalCliente = clienteRepositorio.findById(clienteRepositorio.idUsuario(usuario.getId()));

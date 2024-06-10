@@ -85,6 +85,9 @@ public class ProveedorServicio {
     public Proveedor getPorPedido(String id) { return proveedorRepositorio.getPorPedido(id); }
 
     @Transactional(readOnly = true)
+    public List<Proveedor> getPorServicio(String id) { return proveedorRepositorio.getPorServicio(id); }
+
+    @Transactional(readOnly = true)
     public List<Object> getComentarios(String id) { return proveedorRepositorio.getComentarios(id); }
 
     @Transactional(readOnly = true)

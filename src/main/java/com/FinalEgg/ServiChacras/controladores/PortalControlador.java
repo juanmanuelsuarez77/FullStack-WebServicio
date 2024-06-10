@@ -1,11 +1,13 @@
 package com.FinalEgg.ServiChacras.controladores;
 
-import com.FinalEgg.ServiChacras.entidades.Servicio;
 import com.FinalEgg.ServiChacras.entidades.Usuario;
+import com.FinalEgg.ServiChacras.entidades.Servicio;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
 import com.FinalEgg.ServiChacras.servicios.UsuarioServicio;
 import com.FinalEgg.ServiChacras.servicios.ServicioServicio;
+import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
 import org.springframework.ui.ModelMap;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -26,6 +29,10 @@ public class PortalControlador {
    private UsuarioRepositorio usuarioRepositorio;
    @Autowired
    private ServicioServicio servicioServicio;
+   @Autowired
+   private ServicioRepositorio servicioRepositorio;
+   @Autowired
+   private ProveedorRepositorio proveedorRepositorio;
 
    @GetMapping("/")
    public String index() {
@@ -34,8 +41,19 @@ public class PortalControlador {
 
    @GetMapping("/registrar")
    public String registrar(ModelMap modelo) {
-      List<Servicio> servicios = servicioServicio.listarServicios();
-      modelo.addAttribute("servicios", servicios);
+      List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
+      List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+      List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
+      List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+      List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+      List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+
+      modelo.addAttribute("servicios1", servicios1);
+      modelo.addAttribute("servicios2", servicios2);
+      modelo.addAttribute("servicios3", servicios3);
+      modelo.addAttribute("servicios4", servicios4);
+      modelo.addAttribute("servicios5", servicios5);
+      modelo.addAttribute("servicios6", servicios6);
 
       return "registro.html";
    }
@@ -76,21 +94,47 @@ public class PortalControlador {
          usuarioServicio.registrar(nombre, apellido, email, password, password2,  barrio, rol, direccion, telefono);
 
          if (rol.equalsIgnoreCase("proveedor") || rol.equalsIgnoreCase("mixto")) {
-            try {
-               Usuario usuario = usuarioServicio.getPorEmail(email);
-               usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 0);
+            Usuario usuario = usuarioServicio.getPorEmail(email);
 
-            } catch (MiExcepcion ex) {
-               Usuario usuario = usuarioServicio.getPorEmail(email);
+            if ((descripcion.equals("")) || (descripcion == null) || (idServicio == null)) {
+               usuario = usuarioServicio.getPorEmail(email);
                usuarioRepositorio.deleteById(usuario.getId());
 
-               modelo.put("error", "Los siguientes datos no pueden estar nulos");
-               modelo.put("imagen", nombre);
-               modelo.put("descripcion", apellido);
-               modelo.put("servicio", email);
+               String concat = ".";
+               String servicioNombre = "servicio";
 
+               if (idServicio != null) {
+                  Optional<Servicio> optionalServicio = servicioRepositorio.findById(idServicio);
+                  if (optionalServicio.isPresent()) {
+                     servicioNombre = "";
+                     concat = "";
+                  }
+               }
+
+               String descrip = "";
+               if ((descripcion.equals("")) || (descripcion == null)) {
+                  descrip = "descripción.";
+                  if(!servicioNombre.equals("")) { concat = ", "; }
+               }
+
+               List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
+               List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+               List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
+               List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+               List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+               List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+
+               modelo.addAttribute("servicios1", servicios1);
+               modelo.addAttribute("servicios2", servicios2);
+               modelo.addAttribute("servicios3", servicios3);
+               modelo.addAttribute("servicios4", servicios4);
+               modelo.addAttribute("servicios5", servicios5);
+               modelo.addAttribute("servicios6", servicios6);
+
+               modelo.put("error", "Los siguientes datos no pueden estar nulos: "+servicioNombre+concat+descrip);
                return "registro.html";
             }
+            usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 0);
          }
          modelo.put("exito", "Usuario registrado con exito");
       
@@ -104,7 +148,7 @@ public class PortalControlador {
          modelo.addAttribute("servicios", servicios);
          return "registro.html";
       }
-      return "index.html";
+      return "registro.html";
    }
 
    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_PROVEEDOR', 'ROLE_MIXTO')")
@@ -117,21 +161,48 @@ public class PortalControlador {
          usuarioServicio.actualizar(id, nombre, apellido, email, password, password2, barrio, rol, direccion, telefono);
          
          if (rol.equalsIgnoreCase("proveedor") || rol.equalsIgnoreCase("mixto")) {
-            try {
-               Usuario usuario = usuarioServicio.getOne(id);
-               usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 1);
+            Usuario usuario = usuarioServicio.getOne(id);
+            usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 1);
 
-            } catch (MiExcepcion ex) {
-               Usuario usuario = usuarioServicio.getPorEmail(email);
+            if ((descripcion.equals("")) || (descripcion == null) || (idServicio == null)) {
+               usuario = usuarioServicio.getPorEmail(email);
                usuarioRepositorio.deleteById(usuario.getId());
 
-               modelo.put("error", "Los siguientes datos no pueden estar nulos");
-               modelo.put("imagen", nombre);
-               modelo.put("descripcion", apellido);
-               modelo.put("servicio", email);
+               String concat = ".";
+               String servicioNombre = "servicio";
 
-               return "usuario_modificar.html";
+               if (idServicio != null) {
+                  Optional<Servicio> optionalServicio = servicioRepositorio.findById(idServicio);
+                  if (optionalServicio.isPresent()) {
+                     servicioNombre = "";
+                     concat = "";
+                  }
+               }
+
+               String descrip = "";
+               if ((descripcion.equals("")) || (descripcion == null)) {
+                  descrip = "descripción.";
+                  if(!servicioNombre.equals("")) { concat = ", "; }
+               }
+
+               List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
+               List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+               List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
+               List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+               List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+               List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+
+               modelo.addAttribute("servicios1", servicios1);
+               modelo.addAttribute("servicios2", servicios2);
+               modelo.addAttribute("servicios3", servicios3);
+               modelo.addAttribute("servicios4", servicios4);
+               modelo.addAttribute("servicios5", servicios5);
+               modelo.addAttribute("servicios6", servicios6);
+
+               modelo.put("error", "Los siguientes datos no pueden estar nulos: "+servicioNombre+concat+descrip);
+               return "registro.html";
             }
+            usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 0);
          }
          modelo.put("exito", "Usuario actualizado corectamente");
 
@@ -142,6 +213,6 @@ public class PortalControlador {
 
          return "usuario_modificar.html";
       }
-      return "inicio.html";
+      return "registro.html";
    }
 }

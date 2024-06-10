@@ -17,5 +17,6 @@ public class Servicio {
     private String id;
     @Column(unique = true)
     private String nombre;
+    private String categoria;
     private String detalle;
 }
