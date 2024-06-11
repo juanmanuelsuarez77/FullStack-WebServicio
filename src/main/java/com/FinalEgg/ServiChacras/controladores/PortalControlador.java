@@ -88,7 +88,9 @@ public class PortalControlador {
                           @RequestParam(required = false) String descripcion, @RequestParam(required = false) String idServicio, ModelMap modelo ) {
 
       if (barrio == null) { barrio = 0;}
-      if (rol == null) { rol = "";}
+      if (direccion.trim().isEmpty()) { direccion = "No especificada";}
+      if (telefono.trim().isEmpty()) { telefono = "No especificada";}
+      if (rol == null || rol.trim().isEmpty()) { rol = "USER"; }
       
       try {
          usuarioServicio.registrar(nombre, apellido, email, password, password2,  barrio, rol, direccion, telefono);
@@ -136,7 +138,6 @@ public class PortalControlador {
             }
             usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 0);
          }
-         modelo.put("exito", "Usuario registrado con exito");
       
       } catch (MiExcepcion ex) {
          modelo.put("error", "El usuario no pudo ser registrado");
@@ -148,7 +149,7 @@ public class PortalControlador {
          modelo.addAttribute("servicios", servicios);
          return "registro.html";
       }
-      return "registro.html";
+      return "index.html";
    }
 
    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_PROVEEDOR', 'ROLE_MIXTO')")
@@ -204,15 +205,15 @@ public class PortalControlador {
             }
             usuarioServicio.definirMixto(usuario, archivo, descripcion, idServicio, 0);
          }
-         modelo.put("exito", "Usuario actualizado corectamente");
+         modelo.put("exito", "Usuario actualizado correctamente, ¿desea modificar algo más?");
 
       } catch (MiExcepcion ex) {
          modelo.put("error", ex.getMessage());
          modelo.put("nombre", nombre);
          modelo.put("email", email);
 
-         return "usuario_modificar.html";
+         return "actualizarUsuario.html";
       }
-      return "registro.html";
+      return "actualizarUsuario.html";
    }
 }

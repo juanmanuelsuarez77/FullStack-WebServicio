@@ -1,12 +1,13 @@
 package com.FinalEgg.ServiChacras.repositorios;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-import com.FinalEgg.ServiChacras.entidades.Proveedor;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.FinalEgg.ServiChacras.entidades.Proveedor;
 
 @Repository
 public interface ProveedorRepositorio extends JpaRepository<Proveedor, String> {

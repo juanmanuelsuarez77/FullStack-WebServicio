@@ -1,12 +1,13 @@
 package com.FinalEgg.ServiChacras.repositorios;
 
-import com.FinalEgg.ServiChacras.entidades.Cliente;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.FinalEgg.ServiChacras.entidades.Cliente;
 
 @Repository
 public interface ClienteRepositorio extends JpaRepository<Cliente, String> {

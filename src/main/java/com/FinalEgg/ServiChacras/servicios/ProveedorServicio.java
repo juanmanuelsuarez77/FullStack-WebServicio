@@ -16,11 +16,11 @@ import java.util.Optional;
 @Service
 public class ProveedorServicio {
     @Autowired
-    private ProveedorRepositorio proveedorRepositorio;
+    private ImagenServicio imagenServicio;
     @Autowired
     private ServicioRepositorio servicioRepositorio;
     @Autowired
-    private ImagenServicio imagenServicio;
+    private ProveedorRepositorio proveedorRepositorio;
 
     @Transactional
     public void crearProveedor(Usuario usuario, MultipartFile archivo, String descripcion, String idServicio) throws MiExcepcion {

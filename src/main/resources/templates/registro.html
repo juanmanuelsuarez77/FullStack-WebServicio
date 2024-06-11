@@ -27,9 +27,16 @@
             <div class="collapse navbar-collapse elementosNav" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto me-4 mb-1 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/login" id="navbarDropdown" role="button"
-                            aria-expanded="false">Login</a>
+                        <a class="nav-link" href="/" id="navbarDropdown" role="button"
+                           aria-expanded="false">Inicio
+                        </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" id="navbarDropdown" role="button"
+                            aria-expanded="false">Login
+                        </a>
+                    </li>
+                    Camacho
                 </ul>
             </div>
         </div>
@@ -99,9 +106,9 @@
                                     <label class="form-check-label" for="mixto">Ambos</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="rol" id="nulo"
-                                           value="" th:checked="${rol == ''}">
-                                    <label class="form-check-label" for="nulo">Ninguno</label>
+                                    <input class="form-check-input" type="radio" name="rol" id="user"
+                                           value="user" th:checked="${rol == 'user'}">
+                                    <label class="form-check-label" for="user">Ninguno</label>
                                 </div>
                             </div>
 

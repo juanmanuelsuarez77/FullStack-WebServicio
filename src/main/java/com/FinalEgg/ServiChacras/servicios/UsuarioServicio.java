@@ -4,18 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 
-
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.FinalEgg.ServiChacras.repositorios.*;
 import com.FinalEgg.ServiChacras.entidades.Usuario;
@@ -24,28 +26,24 @@ import com.FinalEgg.ServiChacras.entidades.Proveedor;
 import com.FinalEgg.ServiChacras.enumeraciones.Rol;
 import com.FinalEgg.ServiChacras.enumeraciones.Barrio;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsuarioServicio implements UserDetailsService {
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-    @Autowired
-    private ClienteRepositorio clienteRepositorio;
-    @Autowired
-    private ProveedorRepositorio proveedorRepositorio;
     @Autowired
     private ClienteServicio clienteServicio;
     @Autowired
     private ProveedorServicio proveedorServicio;
     @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
+    @Autowired
     private ServicioRepositorio servicioRepositorio;
+    @Autowired
+    private ProveedorRepositorio proveedorRepositorio;
 
     @Transactional
     public void registrar(String nombre, String apellido, String email, String password, String password2, Integer barrio, String rolString, String direccion, String telefono) throws MiExcepcion {
-
         validar(nombre, apellido, email, password, password2);
         Usuario usuario = new Usuario();
 
@@ -54,21 +52,18 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setEmail(email);
         usuario.setPassword(new BCryptPasswordEncoder().encode(password));
 
-        if (barrio != null) {
-            switch (barrio) {
-                case 1 -> { usuario.setBarrio(Barrio.BARRIO1Ruta2km69); }
-                case 2 -> { usuario.setBarrio(Barrio.BARRIO2Ruta2km75); }
-                case 3 -> { usuario.setBarrio(Barrio.BARRIO3Ruta13km86); }
-            }
-        } else { usuario.setBarrio(Barrio.FORANEO); }
+        switch (barrio) {
+            case 1 -> { usuario.setBarrio(Barrio.BARRIO1Ruta2km69); }
+            case 2 -> { usuario.setBarrio(Barrio.BARRIO2Ruta2km75); }
+            case 3 -> { usuario.setBarrio(Barrio.BARRIO3Ruta13km86); }
+            default -> { usuario.setBarrio(Barrio.FORANEO); }
+        }
 
         usuario.setDireccion(direccion);
         usuario.setTelefono(telefono);
 
-        if (!rolString.equals("")) {
-            Rol rol = Rol.valueOf(rolString.toUpperCase());
-            usuario.setRol(rol);
-        }
+        Rol rol = Rol.valueOf(rolString.toUpperCase());
+        usuario.setRol(rol);
         usuario.setAlta(true);
         
         usuarioRepositorio.save(usuario);

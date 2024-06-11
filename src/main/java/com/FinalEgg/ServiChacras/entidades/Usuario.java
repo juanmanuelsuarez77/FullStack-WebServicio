@@ -1,12 +1,13 @@
 package com.FinalEgg.ServiChacras.entidades;
 
-import com.FinalEgg.ServiChacras.enumeraciones.*;
-
 import jakarta.persistence.*;
+
+import lombok.Setter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.FinalEgg.ServiChacras.enumeraciones.*;
 
 @Getter
 @Setter
