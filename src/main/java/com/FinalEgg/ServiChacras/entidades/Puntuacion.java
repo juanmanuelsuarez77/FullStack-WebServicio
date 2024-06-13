@@ -1,6 +1,5 @@
 package com.FinalEgg.ServiChacras.entidades;
 
-import java.util.List;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -8,23 +7,28 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.FinalEgg.ServiChacras.enumeraciones.Rol;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class Cliente {
+public class Puntuacion {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name ="uuid", strategy = "uuid2")
     private String id;
 
-    @OneToOne
-    @JoinColumn(name ="id_usuario")
-    private Usuario usuario;
+    @ManyToOne
+    @JoinColumn(name ="id_puntuador")
+    private Usuario puntuador;
+    
+    @ManyToOne
+    @JoinColumn(name ="id_puntuado")
+    private Usuario puntuado;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Pedido> pedidos;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
-    @Column(name = "promedio_puntuacion")
-    private Integer promPuntuacion;
+    private Integer puntos;
 }

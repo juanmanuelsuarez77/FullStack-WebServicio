@@ -26,13 +26,11 @@ public class PortalControlador {
    @Autowired
    private UsuarioServicio usuarioServicio;
    @Autowired
-   private UsuarioRepositorio usuarioRepositorio;
-   @Autowired
    private ServicioServicio servicioServicio;
    @Autowired
-   private ServicioRepositorio servicioRepositorio;
+   private UsuarioRepositorio usuarioRepositorio;
    @Autowired
-   private ProveedorRepositorio proveedorRepositorio;
+   private ServicioRepositorio servicioRepositorio;
 
    @GetMapping("/")
    public String index() {
@@ -41,19 +39,19 @@ public class PortalControlador {
 
    @GetMapping("/registrar")
    public String registrar(ModelMap modelo) {
-      List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
-      List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
-      List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
-      List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
-      List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
-      List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+      List<Servicio> limpieza = servicioServicio.listarPorCategoria("Servicios de limpieza");
+      List<Servicio> mantenimiento = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+      List<Servicio> seguridad = servicioServicio.listarPorCategoria("Servicios de seguridad");
+      List<Servicio> tecnologia = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+      List<Servicio> cuidado = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+      List<Servicio> logistica = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
 
-      modelo.addAttribute("servicios1", servicios1);
-      modelo.addAttribute("servicios2", servicios2);
-      modelo.addAttribute("servicios3", servicios3);
-      modelo.addAttribute("servicios4", servicios4);
-      modelo.addAttribute("servicios5", servicios5);
-      modelo.addAttribute("servicios6", servicios6);
+      modelo.addAttribute("limpieza", limpieza);
+      modelo.addAttribute("mantenimiento", mantenimiento);
+      modelo.addAttribute("seguridad", seguridad);
+      modelo.addAttribute("tecnologia", tecnologia);
+      modelo.addAttribute("cuidado", cuidado);
+      modelo.addAttribute("logistica", logistica);
 
       return "registro.html";
    }
@@ -64,12 +62,14 @@ public class PortalControlador {
       return "login.html";
    }
 
-   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENTE', 'ROLE_PROVEEDOR', 'ROLE_MIXTO')")
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENTE', 'ROLE_PROVEEDOR', 'ROLE_MIXTO')")
    @GetMapping("/inicio")
    public String inicio( HttpSession session ) {
       Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
       if ( logueado.getRol().toString().equalsIgnoreCase("ADMIN") ) { return "redirect:/admin/dashboard"; }
+      if ( logueado.getRol().toString().equalsIgnoreCase("CLIENTE") ) { return "inicio-cliente.html"; }
+      if ( logueado.getRol().toString().equalsIgnoreCase("PROVEEDOR") ) { return "inicio-proveedor.html"; }
       return "inicio.html";
    }
 
@@ -119,19 +119,19 @@ public class PortalControlador {
                   if(!servicioNombre.equals("")) { concat = ", "; }
                }
 
-               List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
-               List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
-               List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
-               List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
-               List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
-               List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+               List<Servicio> limpieza = servicioServicio.listarPorCategoria("Servicios de limpieza");
+               List<Servicio> mantenimiento = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+               List<Servicio> seguridad = servicioServicio.listarPorCategoria("Servicios de seguridad");
+               List<Servicio> tecnologia = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+               List<Servicio> cuidado = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+               List<Servicio> logistica = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
 
-               modelo.addAttribute("servicios1", servicios1);
-               modelo.addAttribute("servicios2", servicios2);
-               modelo.addAttribute("servicios3", servicios3);
-               modelo.addAttribute("servicios4", servicios4);
-               modelo.addAttribute("servicios5", servicios5);
-               modelo.addAttribute("servicios6", servicios6);
+               modelo.addAttribute("limpieza", limpieza);
+               modelo.addAttribute("mantenimiento", mantenimiento);
+               modelo.addAttribute("seguridad", seguridad);
+               modelo.addAttribute("tecnologia", tecnologia);
+               modelo.addAttribute("cuidado", cuidado);
+               modelo.addAttribute("logistica", logistica);
 
                modelo.put("error", "Los siguientes datos no pueden estar nulos: "+servicioNombre+concat+descrip);
                return "registro.html";
@@ -186,19 +186,19 @@ public class PortalControlador {
                   if(!servicioNombre.equals("")) { concat = ", "; }
                }
 
-               List<Servicio> servicios1 = servicioServicio.listarPorCategoria("Servicios de limpieza");
-               List<Servicio> servicios2 = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
-               List<Servicio> servicios3 = servicioServicio.listarPorCategoria("Servicios de seguridad");
-               List<Servicio> servicios4 = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
-               List<Servicio> servicios5 = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
-               List<Servicio> servicios6 = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
+               List<Servicio> limpieza = servicioServicio.listarPorCategoria("Servicios de limpieza");
+               List<Servicio> mantenimiento = servicioServicio.listarPorCategoria("Servicios de mantenimiento y reparaciones");
+               List<Servicio> seguridad = servicioServicio.listarPorCategoria("Servicios de seguridad");
+               List<Servicio> tecnologia = servicioServicio.listarPorCategoria("Servicios de tecnologia y conectividad");
+               List<Servicio> cuidado = servicioServicio.listarPorCategoria("Servicios de cuidado personal y bienestar");
+               List<Servicio> logistica = servicioServicio.listarPorCategoria("Servicios de entrega y logistica");
 
-               modelo.addAttribute("servicios1", servicios1);
-               modelo.addAttribute("servicios2", servicios2);
-               modelo.addAttribute("servicios3", servicios3);
-               modelo.addAttribute("servicios4", servicios4);
-               modelo.addAttribute("servicios5", servicios5);
-               modelo.addAttribute("servicios6", servicios6);
+               modelo.addAttribute("limpieza", limpieza);
+               modelo.addAttribute("mantenimiento", mantenimiento);
+               modelo.addAttribute("seguridad", seguridad);
+               modelo.addAttribute("tecnologia", tecnologia);
+               modelo.addAttribute("cuidado", cuidado);
+               modelo.addAttribute("logistica", logistica);
 
                modelo.put("error", "Los siguientes datos no pueden estar nulos: "+servicioNombre+concat+descrip);
                return "registro.html";

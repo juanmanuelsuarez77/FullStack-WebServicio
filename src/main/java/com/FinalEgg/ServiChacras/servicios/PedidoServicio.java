@@ -1,34 +1,38 @@
 package com.FinalEgg.ServiChacras.servicios;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.FinalEgg.ServiChacras.entidades.*;
 import com.FinalEgg.ServiChacras.enumeraciones.Estado;
 import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import com.FinalEgg.ServiChacras.repositorios.PedidoRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ClienteRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PedidoServicio {
     @Autowired
+    private MensajeServicio mensajeServicio;
+    @Autowired
     private PedidoRepositorio pedidoRepositorio;
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     @Autowired
     private ServicioRepositorio servicioRepositorio;
     @Autowired
     private ProveedorRepositorio proveedorRepositorio;
-
-    @Autowired
-    ImagenServicio imagenServicio;
 
     @Transactional
     public void crearPedido(String idCliente, String idServicio, String idProveedor) throws MiExcepcion {
@@ -54,6 +58,8 @@ public class PedidoServicio {
         pedido.setFechaPedido(new Date());
         pedido.setEstado(Estado.PENDIENTE);
         pedido.setAlta(true);
+
+        pedidoRepositorio.save(pedido);
     }
 
     @Transactional(readOnly = true)
@@ -67,9 +73,54 @@ public class PedidoServicio {
             Estado estado = Estado.valueOf(estadoString.toUpperCase());
             pedido.setEstado(estado);
             pedido.setComentario(comentario);
-            pedido.setPuntuacion(puntuacion);
+            pedidoRepositorio.save(pedido);
         });
     }
+
+    @Transactional
+    public void agregarMensajear(String id, String idUsuario, String rolString, String contenido, MultipartFile archivo) throws MiExcepcion {
+        Optional<Pedido> optionalPedido = pedidoRepositorio.findById(id);
+        
+        if (optionalPedido.isPresent()) {
+            Pedido pedido = optionalPedido.get();
+            Optional<Usuario> optionalUsuario = usuarioRepositorio.findById(idUsuario);
+
+            if (optionalUsuario.isPresent()) {
+                Usuario usuario = optionalUsuario.get();
+                List<Mensaje> listMensajes = pedido.getMensajes();
+            
+                try {
+                    Mensaje mensaje = mensajeServicio.crearMensaje(pedido, usuario, rolString, contenido, archivo);
+            
+                    if (listMensajes == null) { listMensajes = new ArrayList<>(); }
+            
+                    listMensajes.add(mensaje); 
+                    pedido.setMensajes(listMensajes); 
+                    pedidoRepositorio.save(pedido);
+
+                } catch (MiExcepcion e) { throw new MiExcepcion("Error al crear el mensaje: " + e.getMessage()); }
+
+            } else { throw new MiExcepcion("El usuario seleccionado no existe."); }
+
+        } else { throw new MiExcepcion("El pedido seleccionado no existe."); } 
+    }
+
+    @Transactional
+    public void eliminarMensaje(String idPedido, String idMensaje) throws MiExcepcion {
+        Optional<Pedido> optionalPedido = pedidoRepositorio.findById(idPedido);
+        
+        if (optionalPedido.isPresent()) {
+            Pedido pedido = optionalPedido.get();
+            List<Mensaje> mensajes = pedido.getMensajes();
+            
+            boolean removed = mensajes.removeIf(mensaje -> mensaje.getId().equals(idMensaje));
+            
+            if (removed) { pedidoRepositorio.save(pedido); } 
+            else { throw new MiExcepcion("El mensaje con id " + idMensaje + " no existe en el pedido con id " + idPedido); }
+
+        } else { throw new MiExcepcion("El pedido con id " + idPedido + " no existe."); }
+    }
+
 
     @Transactional
     public void cancelarPedido(String id) { 
@@ -83,9 +134,6 @@ public class PedidoServicio {
 
     @Transactional(readOnly = true)
     public Pedido getOne(String id) { return pedidoRepositorio.getOne(id); }
-
-    @Transactional(readOnly = true)
-    public Integer puntuacionPorPedido(String id) { return pedidoRepositorio.puntuacionPorPedido(id); }
 
     @Transactional(readOnly = true)
     public List<Object> getPedidoPorClientes(String id) { return pedidoRepositorio.getPedidoPorClientes(id); }

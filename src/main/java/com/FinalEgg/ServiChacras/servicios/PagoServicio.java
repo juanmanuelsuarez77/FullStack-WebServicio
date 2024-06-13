@@ -43,6 +43,7 @@ public class PagoServicio {
         pago.setProveedor(proveedor);
         pago.setValor(valor);
         pago.setEstado(Estado.PENDIENTE);
+        pagoRepositorio.save(pago);
     }
 
     @Transactional(readOnly = true)
@@ -56,6 +57,7 @@ public class PagoServicio {
             Estado estado = Estado.valueOf(estadoString.toUpperCase());
             pago.setEstado(estado);
             pago.setValor(valor);
+            pagoRepositorio.save(pago);
         });
     }
 

@@ -1,17 +1,17 @@
 package com.FinalEgg.ServiChacras.servicios;
 
-import com.FinalEgg.ServiChacras.entidades.*;
-import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
-import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.FinalEgg.ServiChacras.entidades.*;
+import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
+import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
 @Service
 public class ProveedorServicio {
@@ -91,5 +91,5 @@ public class ProveedorServicio {
     public List<Object> getComentarios(String id) { return proveedorRepositorio.getComentarios(id); }
 
     @Transactional(readOnly = true)
-    public List<Object> getPuntuaciones(String id) { return proveedorRepositorio.getPuntuaciones(id); }
+    public Integer getPuntuaciones(String id) { return proveedorRepositorio.getPuntuaciones(id); }
 }

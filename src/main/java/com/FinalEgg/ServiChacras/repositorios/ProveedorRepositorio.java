@@ -26,9 +26,11 @@ public interface ProveedorRepositorio extends JpaRepository<Proveedor, String> {
     @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio")
     public List<Proveedor> getPorServicio(@Param("idServicio") String idServicio);
 
-    @Query("SELECT p.id AS pedido, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente, p.comentario FROM Pedido p WHERE p.cliente.id = :idCliente")
+    @Query("SELECT p.id AS pedido, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente,"+
+           " p.comentario FROM Pedido p WHERE p.cliente.id = :idCliente")
     public List<Object> getComentarios(@Param("idCliente") String idCliente);
 
-    @Query("SELECT CONCAT(p.proveedor.usuario.nombre, ' ', p.proveedor.usuario.apellido) AS proveedor, p.puntuacion FROM Pedido p WHERE p.proveedor.id = :idProveedor")
-    public List<Object> getPuntuaciones(@Param("idProveedor") String idProveedor);
+    @Query("SELECT CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor,"+
+           " p.promPuntuacion FROM Proveedor p WHERE p.id = :idProveedor")
+    public Integer getPuntuaciones(@Param("idProveedor") String idProveedor);
 }

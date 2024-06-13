@@ -1,6 +1,7 @@
 package com.FinalEgg.ServiChacras.entidades;
 
 import java.util.Date;
+import java.util.List;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Pedido {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name ="id-cliente")
+    @JoinColumn(name ="id_cliente")
     private Cliente cliente;
 
     @ManyToOne
@@ -40,6 +41,8 @@ public class Pedido {
     private Estado estado;
 
     private String comentario;
-    private Integer puntuacion;
     private boolean alta;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mensaje> mensajes;
 }

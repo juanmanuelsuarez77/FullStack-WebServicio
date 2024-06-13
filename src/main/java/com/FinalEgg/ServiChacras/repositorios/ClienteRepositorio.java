@@ -23,6 +23,7 @@ public interface ClienteRepositorio extends JpaRepository<Cliente, String> {
     @Query("SELECT cliente FROM Pedido p WHERE p.id = :idPedido")
     public Cliente getPorPedido(@Param("idPedido") String idPedido);
 
-    @Query("SELECT CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente, p.cliente.usuario.email AS correo, p.comentario FROM Pedido p WHERE p.cliente.id = :idUsuario")
+    @Query("SELECT CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente,"+
+           " p.cliente.usuario.email AS correo, p.comentario FROM Pedido p WHERE p.cliente.id = :idUsuario")
     public List<Object> getComentarios(@Param("idUsuario") String idUsuario);
 }

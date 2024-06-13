@@ -123,42 +123,42 @@
                                     <option value="" disabled selected>Seleccione un servicio</option>
 
                                     <optgroup label="Servicios de limpieza">
-                                        <option class="opcion" th:each="servicio : ${servicios1}"
+                                        <option class="opcion" th:each="servicio : ${limpieza}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>
                                         </option>
                                     </optgroup>
                                     <optgroup label="Servicios de mantenimiento y reparaciones">
-                                        <option class="opcion" th:each="servicio : ${servicios2}"
+                                        <option class="opcion" th:each="servicio : ${mantenimiento}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>
                                         </option>
                                     </optgroup>
                                     <optgroup label="Servicios de seguridad">
-                                        <option class="opcion" th:each="servicio : ${servicios3}"
+                                        <option class="opcion" th:each="servicio : ${seguridad}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>
                                         </option>
                                     </optgroup>
                                     <optgroup label="Servicios de tecnología y conectividad">
-                                        <option class="opcion" th:each="servicio : ${servicios4}"
+                                        <option class="opcion" th:each="servicio : ${tecnologia}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>
                                         </option>
                                     </optgroup>
                                     <optgroup label="Servicios de cuidado personal y bienestar">
-                                        <option class="opcion" th:each="servicio : ${servicios5}"
+                                        <option class="opcion" th:each="servicio : ${cuidado}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>
                                         </option>
                                     </optgroup>
                                     <optgroup label="Servicios de entrega y logística">
-                                        <option class="opcion" th:each="servicio : ${servicios6}"
+                                        <option class="opcion" th:each="servicio : ${logistica}"
                                             th:value="${servicio.id}"
                                             th:text="${servicio.nombre}">
                                             <span></span>

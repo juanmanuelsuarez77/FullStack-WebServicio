@@ -31,6 +31,10 @@ public class Pago {
     @JoinColumn(name ="id_proveedor")
     private Proveedor proveedor;
 
+    @ManyToOne
+    @JoinColumn(name ="id_notificacion")
+    private Notificacion notificacion;
+
     private Integer valor;
     
     @Enumerated(EnumType.STRING)

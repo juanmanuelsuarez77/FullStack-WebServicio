@@ -38,8 +38,6 @@ public class UsuarioServicio implements UserDetailsService {
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     @Autowired
-    private ServicioRepositorio servicioRepositorio;
-    @Autowired
     private ProveedorRepositorio proveedorRepositorio;
 
     @Transactional

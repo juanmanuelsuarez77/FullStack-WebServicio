@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Setter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import com.FinalEgg.ServiChacras.enumeraciones.*;
@@ -32,6 +35,9 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     private Rol rol;    
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notificacion> notificaciones;
 
     private boolean alta;
 }
