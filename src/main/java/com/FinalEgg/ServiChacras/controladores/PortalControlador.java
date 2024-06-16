@@ -1,13 +1,7 @@
 package com.FinalEgg.ServiChacras.controladores;
 
-import com.FinalEgg.ServiChacras.entidades.Usuario;
-import com.FinalEgg.ServiChacras.entidades.Servicio;
-import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import com.FinalEgg.ServiChacras.servicios.UsuarioServicio;
-import com.FinalEgg.ServiChacras.servicios.ServicioServicio;
-import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
-import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
-import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.ui.ModelMap;
 import jakarta.servlet.http.HttpSession;
@@ -17,8 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.util.List;
-import java.util.Optional;
+import com.FinalEgg.ServiChacras.entidades.Usuario;
+import com.FinalEgg.ServiChacras.entidades.Servicio;
+import com.FinalEgg.ServiChacras.entidades.Notificacion;
+import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
+import com.FinalEgg.ServiChacras.servicios.UsuarioServicio;
+import com.FinalEgg.ServiChacras.servicios.ServicioServicio;
+import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.NotificacionRepositorio;
 
 @Controller
 @RequestMapping("/")
@@ -31,6 +32,8 @@ public class PortalControlador {
    private UsuarioRepositorio usuarioRepositorio;
    @Autowired
    private ServicioRepositorio servicioRepositorio;
+   @Autowired
+   private NotificacionRepositorio notificacionRepositorio;
 
    @GetMapping("/")
    public String index() {
@@ -64,11 +67,18 @@ public class PortalControlador {
 
    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENTE', 'ROLE_PROVEEDOR', 'ROLE_MIXTO')")
    @GetMapping("/inicio")
-   public String inicio( HttpSession session ) {
+   public String inicio( ModelMap modelo, HttpSession session, @RequestParam(required = false) String idUsuario ) {
       Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
       if ( logueado.getRol().toString().equalsIgnoreCase("ADMIN") ) { return "redirect:/admin/dashboard"; }
-      if ( logueado.getRol().toString().equalsIgnoreCase("CLIENTE") ) { return "inicio-cliente.html"; }
+      if ( logueado.getRol().toString().equalsIgnoreCase("CLIENTE") ) { 
+         Integer notificacionNoVisto = notificacionRepositorio.contarPorUsuarioNoVisto(idUsuario);
+         List<Notificacion> notificaciones = notificacionRepositorio.getPorUsuarioNoVisto(idUsuario);
+
+         modelo.put("notificacionNoVisto", notificacionNoVisto);
+         modelo.put("notificaciones", notificaciones);
+         return "inicio-cliente.html"; 
+      }
       if ( logueado.getRol().toString().equalsIgnoreCase("PROVEEDOR") ) { return "inicio-proveedor.html"; }
       return "inicio.html";
    }

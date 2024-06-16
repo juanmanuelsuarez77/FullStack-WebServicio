@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteRadio = document.getElementById('cliente');
     var proveedorRadio = document.getElementById('proveedor');
     var mixtoRadio = document.getElementById('mixto');
+    var userRadio= document.getElementById('user');
     var tipoServicioDiv = document.getElementById('tipoServicio');
 
     function toggleTipoServicio() {
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     clienteRadio.addEventListener('change', toggleTipoServicio);
+    userRadio.addEventListener('change', toggleTipoServicio);
     proveedorRadio.addEventListener('change', toggleTipoServicio);
     mixtoRadio.addEventListener('change', toggleTipoServicio);
     toggleTipoServicio();

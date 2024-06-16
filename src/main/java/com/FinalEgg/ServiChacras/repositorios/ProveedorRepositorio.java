@@ -11,26 +11,29 @@ import com.FinalEgg.ServiChacras.entidades.Proveedor;
 
 @Repository
 public interface ProveedorRepositorio extends JpaRepository<Proveedor, String> {
-    @Query("SELECT p.id FROM Proveedor p WHERE p.usuario.id = :idUsuario")
-    public String idUsuario(@Param("idUsuario") String idUsuario);
+       @Query("SELECT p.id FROM Proveedor p WHERE p.usuario.id = :idUsuario")
+       public String idUsuario(@Param("idUsuario") String idUsuario);
 
-    @Query("SELECT p FROM Proveedor p WHERE p.usuario.email = :email")
-    public Proveedor getPorEmail(@Param("email") String email);
+       @Query("SELECT p FROM Proveedor p WHERE p.usuario.email = :email")
+       public Proveedor getPorEmail(@Param("email") String email);
 
-    @Query("SELECT p FROM Proveedor p WHERE p.usuario.barrio = :barrio AND p.usuario.direccion = :direccion")
-    public List<Proveedor> getPorDireccion(@Param("barrio") String barrio, @Param("direccion") String direccion);
+       @Query("SELECT p.servicio.id AS id_servicio FROM Proveedor p WHERE p.id = :idProveedor")
+       public String getIdServicio(@Param("idProveedor") String idProveedor);
 
-    @Query("SELECT p FROM Pedido p WHERE p.id = :idPedido")
-    public Proveedor getPorPedido(@Param("idPedido") String idPedido);
+       @Query("SELECT p FROM Proveedor p WHERE p.usuario.barrio = :barrio AND p.usuario.direccion = :direccion")
+       public List<Proveedor> getPorDireccion(@Param("barrio") String barrio, @Param("direccion") String direccion);
 
-    @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio")
-    public List<Proveedor> getPorServicio(@Param("idServicio") String idServicio);
+       @Query("SELECT p FROM Pedido p WHERE p.id = :idPedido")
+       public Proveedor getPorPedido(@Param("idPedido") String idPedido);
 
-    @Query("SELECT p.id AS pedido, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente,"+
-           " p.comentario FROM Pedido p WHERE p.cliente.id = :idCliente")
-    public List<Object> getComentarios(@Param("idCliente") String idCliente);
+       @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio")
+       public List<Proveedor> getPorServicio(@Param("idServicio") String idServicio);
 
-    @Query("SELECT CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor,"+
-           " p.promPuntuacion FROM Proveedor p WHERE p.id = :idProveedor")
-    public Integer getPuntuaciones(@Param("idProveedor") String idProveedor);
+       @Query("SELECT p.id AS pedido, CONCAT(p.cliente.usuario.nombre, ' ', p.cliente.usuario.apellido) AS cliente,"+
+              " p.comentario FROM Pedido p WHERE p.cliente.id = :idCliente")
+       public List<Object> getComentarios(@Param("idCliente") String idCliente);
+
+       @Query("SELECT CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor,"+
+              " p.promPuntuacion FROM Proveedor p WHERE p.id = :idProveedor")
+       public Integer getPuntuaciones(@Param("idProveedor") String idProveedor);
 }

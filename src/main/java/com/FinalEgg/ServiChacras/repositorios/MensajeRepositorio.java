@@ -13,14 +13,13 @@ import com.FinalEgg.ServiChacras.entidades.Mensaje;
 @Repository
 public interface MensajeRepositorio extends JpaRepository<Mensaje, String> {
        @Query("SELECT m.contenido FROM Mensaje m WHERE m.usuario.id = :idUsuario")
-       public List<Mensaje> verMsjsEnviados(@Param("idMensaje") String idMensaje, @Param("idUsuario") String idUsuario);
+       public List<Mensaje> bandejaDeSalida(@Param("idUsuario") String idUsuario);
 
        @Query("SELECT m FROM Mensaje m WHERE m.pedido.id IN (SELECT m1.pedido.id FROM Mensaje m1 WHERE m1.usuario.id = :idUsuario) "+
               "AND m.rol <> (SELECT u.rol FROM Usuario u WHERE u.id = :idUsuario)")
-       public List<Mensaje> verMsjsRecibidos(@Param("idUsuario") String idUsuario);
+       public List<Mensaje> bandejaDeEntrada(@Param("idUsuario") String idUsuario);
 
-       @Query("SELECT m FROM Mensaje mc JOIN mc.usuario c JOIN Mensaje mp JOIN mp.usuario p WHERE mc.pedido.id = :idPedido "+
-              "AND mc.rol = 'CLIENTE' AND mp.pedido.id = :idPedido AND mp.rol = 'PROVEEDOR'")
+       @Query("SELECT m FROM Mensaje m WHERE m.pedido.id = :idPedido AND (m.rol = 'CLIENTE' OR m.rol = 'PROVEEDOR')")
        public List<Mensaje> conversacionPorPedido(@Param("idPedido") String idPedido);
 
        @Query("SELECT m FROM Mensaje m WHERE m.pedido.id = :pedidoId AND m.rol <> (SELECT u.rol FROM Usuario u WHERE u.id = :idUsuario)")

@@ -35,7 +35,7 @@ public class PedidoServicio {
     private ProveedorRepositorio proveedorRepositorio;
 
     @Transactional
-    public void crearPedido(String idCliente, String idServicio, String idProveedor) throws MiExcepcion {
+    public Pedido crearPedido(String idCliente, String idServicio, String idProveedor) throws MiExcepcion {
         Pedido pedido = new Pedido();
 
         Optional<Cliente> opcionalCliente = clienteRepositorio.findById(idCliente);
@@ -60,6 +60,7 @@ public class PedidoServicio {
         pedido.setAlta(true);
 
         pedidoRepositorio.save(pedido);
+        return pedido;
     }
 
     @Transactional(readOnly = true)

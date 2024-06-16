@@ -36,7 +36,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;    
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notificacion> notificaciones;
 
     private boolean alta;

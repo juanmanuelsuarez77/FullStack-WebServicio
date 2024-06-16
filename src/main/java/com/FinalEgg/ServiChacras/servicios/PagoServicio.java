@@ -27,7 +27,7 @@ public class PagoServicio {
     ImagenServicio imagenServicio;
 
     @Transactional
-    public void crearPago(String idCliente, String idProveedor, Integer valor) throws MiExcepcion {
+    public Pago crearPago(String idCliente, String idProveedor, Integer valor) throws MiExcepcion {
         Pago pago = new Pago();
 
         Optional<Cliente> opcionalCliente = clienteRepositorio.findById(idCliente);
@@ -43,7 +43,9 @@ public class PagoServicio {
         pago.setProveedor(proveedor);
         pago.setValor(valor);
         pago.setEstado(Estado.PENDIENTE);
+
         pagoRepositorio.save(pago);
+        return pago;
     }
 
     @Transactional(readOnly = true)
