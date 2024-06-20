@@ -15,9 +15,18 @@ public interface MensajeRepositorio extends JpaRepository<Mensaje, String> {
        @Query("SELECT m.contenido FROM Mensaje m WHERE m.usuario.id = :idUsuario")
        public List<Mensaje> bandejaDeSalida(@Param("idUsuario") String idUsuario);
 
+       @Query("SELECT CONCAT(u.nombre, ' ', u.apellido) AS remitente FROM Usuario u WHERE u.id = :idRemitente")
+       public String getRemitente(@Param("idRemitente") String idRemitente);
+
        @Query("SELECT m FROM Mensaje m WHERE m.pedido.id IN (SELECT m1.pedido.id FROM Mensaje m1 WHERE m1.usuario.id = :idUsuario) "+
               "AND m.rol <> (SELECT u.rol FROM Usuario u WHERE u.id = :idUsuario)")
        public List<Mensaje> bandejaDeEntrada(@Param("idUsuario") String idUsuario);
+
+       @Query("SELECT m FROM Mensaje m WHERE m.usuario.id = :idUsuario AND m.visto LIKE 'PENDIENTE'")
+       public List<Mensaje> getPorUsuarioNoVisto( @Param("idUsuario") String idUsuario);
+
+       @Query("SELECT COUNT(m) FROM Mensaje m WHERE m.usuario.id = :idUsuario AND m.visto LIKE 'PENDIENTE'")
+       public Integer contarPorUsuarioNoVisto( @Param("idUsuario") String idUsuario);
 
        @Query("SELECT m FROM Mensaje m WHERE m.pedido.id = :idPedido AND (m.rol = 'CLIENTE' OR m.rol = 'PROVEEDOR')")
        public List<Mensaje> conversacionPorPedido(@Param("idPedido") String idPedido);

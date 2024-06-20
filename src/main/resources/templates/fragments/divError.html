@@ -3,6 +3,7 @@
       <div class="card__error">
           <h5 class="error-title">Error 👎</h5>
           <p class="error-text" th:text="${error}"></p>
+          <p class="error-text" th:text="${detalle}"></p>
       </div>
   </div>
   <div th:if="${exito != null}" class="msj msj__exito" >

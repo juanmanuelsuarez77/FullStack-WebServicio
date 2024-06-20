@@ -1,5 +1,6 @@
 package com.FinalEgg.ServiChacras.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.FinalEgg.ServiChacras.entidades.Mensaje;
 import com.FinalEgg.ServiChacras.entidades.Usuario;
 import com.FinalEgg.ServiChacras.entidades.Servicio;
 import com.FinalEgg.ServiChacras.entidades.Notificacion;
@@ -18,6 +20,7 @@ import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
 import com.FinalEgg.ServiChacras.servicios.UsuarioServicio;
 import com.FinalEgg.ServiChacras.servicios.ServicioServicio;
 import com.FinalEgg.ServiChacras.repositorios.UsuarioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.MensajeRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
 import com.FinalEgg.ServiChacras.repositorios.NotificacionRepositorio;
 
@@ -28,6 +31,8 @@ public class PortalControlador {
    private UsuarioServicio usuarioServicio;
    @Autowired
    private ServicioServicio servicioServicio;
+   @Autowired
+   private MensajeRepositorio mensajeRepositorio;
    @Autowired
    private UsuarioRepositorio usuarioRepositorio;
    @Autowired
@@ -71,15 +76,40 @@ public class PortalControlador {
       Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
       if ( logueado.getRol().toString().equalsIgnoreCase("ADMIN") ) { return "redirect:/admin/dashboard"; }
-      if ( logueado.getRol().toString().equalsIgnoreCase("CLIENTE") ) { 
+
+      if ( logueado.getRol().toString().equalsIgnoreCase("CLIENTE") ) {
+          
+         //Conteo e indicaciones de Notificaciones en Navegador--------------------->
+         Integer mensajeNoVisto = mensajeRepositorio.contarPorUsuarioNoVisto(idUsuario);
+         List<Mensaje> mensajes = mensajeRepositorio.getPorUsuarioNoVisto(idUsuario);
+
+         modelo.put("mensajeNoVisto", mensajeNoVisto);
+         modelo.put("mensajes", mensajes);
+         //--------------------------------------------------------------------------//
+
+         //Conteo e indicaciones de Notificaciones en Navegador--------------------->
          Integer notificacionNoVisto = notificacionRepositorio.contarPorUsuarioNoVisto(idUsuario);
          List<Notificacion> notificaciones = notificacionRepositorio.getPorUsuarioNoVisto(idUsuario);
+         List<String> notas = new ArrayList<>();
+         String nota = "";
+
+         for (Notificacion notificacion : notificaciones) {
+            nota = notificacion.getRemitente() + " - " + notificacion.getAsunto();
+            notas.add(nota);
+         }
 
          modelo.put("notificacionNoVisto", notificacionNoVisto);
          modelo.put("notificaciones", notificaciones);
+         modelo.put("notas", notas);
+         //--------------------------------------------------------------------------//
+
          return "inicio-cliente.html"; 
       }
+
       if ( logueado.getRol().toString().equalsIgnoreCase("PROVEEDOR") ) { return "inicio-proveedor.html"; }
+
+      if ( logueado.getRol().toString().equalsIgnoreCase("MIXTO") ) { return "inicio-mixto.html"; }
+
       return "inicio.html";
    }
 
@@ -101,7 +131,23 @@ public class PortalControlador {
       if (direccion.trim().isEmpty()) { direccion = "No especificada";}
       if (telefono.trim().isEmpty()) { telefono = "No especificada";}
       if (rol == null || rol.trim().isEmpty()) { rol = "USER"; }
-      
+
+      Usuario posibleUsuario = usuarioRepositorio.buscarPorEmail(email);
+
+      String detalle = "";
+       
+      if (posibleUsuario != null) {
+         modelo.put("error", "El usuario no pudo ser registrado");
+
+         detalle = "El correo ya se encuentra registrado";
+
+         modelo.put("detalle", detalle);
+        
+         List<Servicio> servicios = servicioServicio.listarServicios();
+         modelo.addAttribute("servicios", servicios);
+         return "registro.html";
+      }
+
       try {
          usuarioServicio.registrar(nombre, apellido, email, password, password2,  barrio, rol, direccion, telefono);
 
@@ -151,9 +197,9 @@ public class PortalControlador {
       
       } catch (MiExcepcion ex) {
          modelo.put("error", "El usuario no pudo ser registrado");
-         modelo.put("nombre", nombre);
-         modelo.put("apellido", apellido);
-         modelo.put("email", email);
+         
+         detalle = nombre + " " + apellido + "\n" + email + ": " + email;
+         modelo.put("detalle", detalle);
 
          List<Servicio> servicios = servicioServicio.listarServicios();
          modelo.addAttribute("servicios", servicios);
@@ -168,6 +214,9 @@ public class PortalControlador {
                             @RequestParam(required = false) String password, @RequestParam(required = false) String password2, @RequestParam(required = false) Integer barrio,
                             @RequestParam(required = false) String rol, @RequestParam(required = false) String direccion, @RequestParam(required = false) String telefono, 
                             @RequestParam(required = false) MultipartFile archivo, @RequestParam(required = false) String descripcion, @RequestParam(required = false) String idServicio, ModelMap modelo ) {
+
+      String detalle = "";
+
       try {
          usuarioServicio.actualizar(id, nombre, apellido, email, password, password2, barrio, rol, direccion, telefono);
          
@@ -218,9 +267,8 @@ public class PortalControlador {
          modelo.put("exito", "Usuario actualizado correctamente, ¿desea modificar algo más?");
 
       } catch (MiExcepcion ex) {
-         modelo.put("error", ex.getMessage());
-         modelo.put("nombre", nombre);
-         modelo.put("email", email);
+         detalle = nombre + " " + apellido + "\n" + email + ": " + email;
+         modelo.put("detalle", detalle);
 
          return "actualizarUsuario.html";
       }

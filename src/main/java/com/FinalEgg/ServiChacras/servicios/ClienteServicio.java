@@ -56,5 +56,8 @@ public class ClienteServicio {
     public Cliente getPorPedido(String id) { return clienteRepositorio.getPorPedido(id); }
 
     @Transactional(readOnly = true)
+    public List<Cliente> getPorPedidoCompartidos(String idProveedor) { return clienteRepositorio.getPorPedidoCompartidos(idProveedor); }
+
+    @Transactional(readOnly = true)
     public List<Object> getComentarios(String id) { return clienteRepositorio.getComentarios(id); }
 }

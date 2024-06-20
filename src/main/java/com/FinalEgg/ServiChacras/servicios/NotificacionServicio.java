@@ -32,7 +32,7 @@ public class NotificacionServicio {
     public void crearNotificacion(String notaString, String idRemitente, String idDestinatario, String idCliente, String idProveedor, String idPago, String idPedido, String idDenuncia, Integer valor) throws MiExcepcion {
         TipoDeNota nota = TipoDeNota.valueOf(notaString.toUpperCase());
         Notificacion notificacion = new Notificacion();
-        String nombre = "";
+        String asunto = "";
 
         Optional<Usuario> optionalRemitente = usuarioRepositorio.findById(idRemitente);
         
@@ -54,43 +54,43 @@ public class NotificacionServicio {
                 
                 switch (notaString) {
                     case "PEDIDOSolicitud" -> { 
-                        nombre = "Solicitud de Pedido";
+                        asunto = "Solicitud de Pedido";
                         String idServicio = proveedorRepositorio.getIdServicio(idProveedor);
                         Pedido pedido = pedidoServicio.crearPedido(idCliente, idServicio, idProveedor);
                         notificacion.setPedido(pedido.getId());  
                     }
-                    case "PEDIDOAceptado"-> { nombre = "Se ha aceptado el Pedido"; }
-                    case "PEDIDORechazado" -> { nombre = "Se ha rechazado el Pedido"; }
-                    case "PEDIDOCancelado" -> { nombre = "Se ha cancelado el Pedido"; }
+                    case "PEDIDOAceptado"-> { asunto = "Se ha aceptado el Pedido"; }
+                    case "PEDIDORechazado" -> { asunto = "Se ha rechazado el Pedido"; }
+                    case "PEDIDOCancelado" -> { asunto = "Se ha cancelado el Pedido"; }
                     case "PEDIDOFinalizado" -> { 
-                        nombre = "Se ha concluido el Pedido"; 
+                        asunto = "Se ha concluido el Pedido"; 
                         List<Notificacion> notificaciones = notificacionRepositorio.notificacionPorPedido(idPedido);
                         notificaciones.removeIf(noti -> noti.getPedido().equals(idPedido));
                         notificacion.setPedido(idPedido);
                     }
                     case "PAGOPendiente"-> { 
-                        nombre = "Pago Pendiente"; 
+                        asunto = "Pago Pendiente"; 
                         Pago pago = pagoServicio.crearPago(idCliente, idProveedor, valor);
                         notificacion.setPago(pago.getId());  
                     }
-                    case "PAGODemandado" -> { nombre = "Pago Exigido"; }
+                    case "PAGODemandado" -> { asunto = "Pago Exigido"; }
                     case "PAGOEfectuado" -> { 
-                        nombre = "Ha recibido el Pago"; 
+                        asunto = "Ha recibido el Pago"; 
                         List<Notificacion> notificaciones = notificacionRepositorio.notificacionPorPago(idPago);
                         notificaciones.removeIf(noti -> noti.getPago().equals(idPago));
                         notificacion.setPago(idPago);
                     }
-                    case "DENUNCIA"-> { nombre = "Tiene una Denuncia"; }
+                    case "DENUNCIA"-> { asunto = "Tiene una Denuncia"; }
                     case "DENUNCIARechazada" -> { 
-                        nombre = "Denuncia desestimada";
+                        asunto = "Denuncia desestimada";
                         List<Notificacion> notificaciones = notificacionRepositorio.notificacionPorDenuncia(idDenuncia);
                         notificaciones.removeIf(noti -> noti.getDenuncia().equals(idDenuncia));
                         notificacion.setDenuncia(idDenuncia);
                     }
-                    case "PUNTUACION" -> { nombre = "Fué puntuado"; }
+                    case "PUNTUACION" -> { asunto = "Fué puntuado"; }
                 }
         
-                notificacion.setNombre(nombre);
+                notificacion.setAsunto(asunto);
 
                 notificacionRepositorio.save(notificacion);
                 usuarioServicio.notificarUsuario(destinatario, notificacion);

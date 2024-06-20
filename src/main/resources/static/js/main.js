@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function toggleTipoServicio() {
         if (proveedorRadio.checked || mixtoRadio.checked) {
-            tipoServicioDiv.style.display = 'block';
+            tipoServicioDiv.style.display = 'block';            
         } else {
             tipoServicioDiv.style.display = 'none';
         }
@@ -304,4 +304,90 @@ document.getElementById('formulario-reporte').addEventListener('submit', functio
     // Luego de enviar el formulario, puedes cerrar el modal:
     document.getElementById('report-form-overlay').style.display = 'none';
     document.getElementById('report-form').style.display = 'none';
+});
+
+
+// Espera a que se cargue completamente la página
+document.addEventListener('DOMContentLoaded', function() {
+    // Crear el elemento div con la clase "card"
+    var cardDiv = document.createElement('div');
+    cardDiv.classList.add('card');
+
+    // Crear la imagen dentro del div.card
+    var img = document.createElement('img');
+    img.src = '...'; // Aquí va la URL de la imagen
+    img.classList.add('card-img-top');
+    img.alt = '...'; // Texto alternativo de la imagen
+    cardDiv.appendChild(img);
+
+    // Crear el div.card-body para el título
+    var cardBodyTitle = document.createElement('div');
+    cardBodyTitle.classList.add('card-body');
+
+    // Crear el título h5 dentro del div.card-body
+    var cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+    cardTitle.textContent = 'Nombre de la empresa';
+    cardBodyTitle.appendChild(cardTitle);
+
+    // Añadir el div.card-body del título al div.card
+    cardDiv.appendChild(cardBodyTitle);
+
+    // Crear la lista ul.list-group.list-group-flush
+    var listGroup = document.createElement('ul');
+    listGroup.classList.add('list-group', 'list-group-flush');
+
+    // Crear los elementos li dentro de la lista
+    var listItem1 = document.createElement('li');
+    listItem1.classList.add('list-group-item');
+    listItem1.textContent = 'Servicio que ofrece';
+    listGroup.appendChild(listItem1);
+
+    var listItem2 = document.createElement('li');
+    listItem2.classList.add('list-group-item');
+    listItem2.textContent = 'Su ubicación';
+    listGroup.appendChild(listItem2);
+
+    var listItem3 = document.createElement('li');
+    listItem3.classList.add('list-group-item');
+    listItem3.textContent = 'Precio del servicio en el día';
+    listGroup.appendChild(listItem3);
+
+    // Añadir la lista ul al div.card
+    cardDiv.appendChild(listGroup);
+
+    // Crear el segundo div.card-body para los botones
+    var cardBodyButtons = document.createElement('div');
+    cardBodyButtons.classList.add('card-body');
+
+    // Crear el primer botón "Más Info"
+    var cardLink1 = document.createElement('a');
+    cardLink1.href = '#';
+    cardLink1.classList.add('card-link');
+    var button1 = document.createElement('button');
+    button1.type = 'button';
+    button1.classList.add('btn', 'btn-outline-info');
+    button1.textContent = 'Más Info';
+    cardLink1.appendChild(button1);
+    cardBodyButtons.appendChild(cardLink1);
+
+    // Crear el segundo botón "Solicitar Servicio"
+    var cardLink2 = document.createElement('a');
+    cardLink2.href = '#';
+    cardLink2.classList.add('card-link');
+    var button2 = document.createElement('button');
+    button2.type = 'button';
+    button2.classList.add('btn', 'btn-outline-success');
+    button2.textContent = 'Solicitar Servicio';
+    cardLink2.appendChild(button2);
+    cardBodyButtons.appendChild(cardLink2);
+
+    // Añadir el segundo div.card-body de los botones al div.card
+    cardDiv.appendChild(cardBodyButtons);
+
+    // Obtener el elemento donde se insertará la nueva tarjeta (por ejemplo, el body)
+    var container = document.body; // Puedes cambiar esto por el contenedor deseado
+
+    // Añadir la tarjeta creada al contenedor
+    container.appendChild(cardDiv);
 });

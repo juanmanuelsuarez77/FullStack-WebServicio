@@ -19,15 +19,14 @@ public class Notificacion {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    private String nombre;
+    private String asunto;
+    private String remitente;
     
    @Enumerated(EnumType.STRING)
     private TipoDeNota nota;
 
     @Enumerated(EnumType.STRING)
     private Estado visto;
-
-    private String remitente;
 
     @ManyToOne
     @JoinColumn(name = "id_destinatario")

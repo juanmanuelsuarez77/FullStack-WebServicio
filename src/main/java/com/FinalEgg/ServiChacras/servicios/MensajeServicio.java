@@ -25,10 +25,13 @@ public class MensajeServicio {
     private MensajeRepositorio mensajeRepositorio;
 
     @Transactional
-    public Mensaje crearMensaje(Pedido pedido, Usuario usuario, String rolString, String contenido, MultipartFile archivo) throws MiExcepcion {
+    public Mensaje crearMensaje(String idRemitente, String asunto, Pedido pedido, Usuario usuario, String rolString, String contenido, MultipartFile archivo) throws MiExcepcion {
+        String remitente = mensajeRepositorio.getRemitente(idRemitente);
         Rol rol = Rol.valueOf(rolString.toUpperCase());
         Mensaje mensaje = new Mensaje();
 
+        mensaje.setAsunto(asunto);
+        mensaje.setRemitente(remitente);
         mensaje.setPedido(pedido);
         mensaje.setUsuario(usuario);
         mensaje.setRol(rol);

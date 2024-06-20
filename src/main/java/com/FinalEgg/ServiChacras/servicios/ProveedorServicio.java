@@ -43,7 +43,7 @@ public class ProveedorServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Proveedor> listarProveedors() { return proveedorRepositorio.findAll(); }
+    public List<Proveedor> listarProveedores() { return proveedorRepositorio.findAll(); }
 
     @Transactional
     public void actualizar(String id, Usuario usuario, MultipartFile archivo, String descripcion, String idServicio) throws MiExcepcion {

@@ -7,7 +7,9 @@
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/error.css">
+        <link rel="stylesheet" href="/css/footer.css">
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
     </head>
     <body>
@@ -20,63 +22,77 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
+              
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto me-4 mb-1 mb-lg-0">
-                  <form class="d-flex" role="search" style="display: flex; align-items: center;">
-                    <button id="filtro" type="button" class="btn btn-secondary" style="margin-right: 5px; ">Filtro</button>
-                    <input class="form-control me-2" type="search" placeholder="Busca un proveedor" aria-label="Search" name="buscador" th:value="${buscador}">
+
+                  <li class="nav-item">
+                    <input type="hidden" th:value="'CLIENTE'" id="rolSession" name="rolSession">
+                    <a th:href="@{/usuario/buscador(rolSession=${'CLIENTE'})}" class="btn btn-secondary my-2 botonVolver botones">
+                        <button id="filtro" type="button" class="btn btn-secondary" style="margin-right: 5px;">Filtro avanzado</button>
+                    </a>
+                  </li>
+                  
+                  <form class="d-flex" role="search" style="display: flex; align-items: center;" th:action="@{/usuario/expositor}" method="post">
+                    <input class="form-control me-2" type="search" placeholder="Busca un proveedor" aria-label="Search" name="nombreUsuario" th:value="${nombreUsuario}">
                     <button class="btn btn-outline-success" type="submit" style="display:flex; flex-direction:row;"><i class="fas fa-search icono-lupa"></i></button>
                   </form>
-                  <div id="detalles-filtro">
-                    <ul class="list-group" th:action="@{/buscador}">
-                      <li class="list-group-item"><input hidden th:value="${barrio}" name="barrio">Barrio </li>
-                      <li class="list-group-item"><input hidden th:value="${nombreProveedor}" name="nombreProveedor">Proveedor </li>
-                      <li class="list-group-item"><input hidden th:value="${servicio}" name="servicio">Servicio </li>
-                    </ul>
-                  </div>
+
                   <li class="nav-item">
                     <a id="mensajes" class="nav-link">
                       <div class="notification-bell">
                         <img src="img/mensaje-icono.png" style="border-radius: 10px; width: 30px; height:30px; margin-left:5px; margin-right:5px;" alt="">
-                        <span class="notification-count">3</span>
+                        <span class="notification-count" th:text="${mensajeNoVisto}"></span>
                       </div>
                     </a>
-                    <div id="noti-mensajes">
-                      <ul class="list-group">
 
+                    <div id="noti-mensajes">
+                      <ul class="list-group"th:each="mensaje : ${mensajes}">
+                        <li class="list-group-item" style="border: 1px solid whitesmoke;" th:text="${mensaje.remitente}"></li>
+                        <a class="nav-link navbarDropdown" th:href="@{/mensajeria/bandejaMensajes/__${mensaje.id}__}">Ver mensaje</a>
                       </ul>
                     </div>
                   </li>
+
                   <li class="nav-item">
                     <a id="campana" class="nav-link">
                         <div class="notification-bell">
                             <img src="img/campana.jpg" style="border-radius: 10px; width: 30px; height:30px;" alt="">
-                            <span class="notification-count" th:text="${notificacionNoVisto}"></span>
+                            <span class="notification-count" th:text="${notificacionNoVisto}"></span>                            
                         </div>
                     </a>
+
                     <div id="notification">
                       <ul class="list-group" th:each="notificacion : ${notificaciones}">
-                        <li class="list-group-item" style="border: 1px solid whitesmoke;" th:text="${notificacion.nombre}"></li>
+                        <span th:each="nota : ${notas}">
+                          <li class="list-group-item" style="border: 1px solid whitesmoke;" th:text="${nota}"></li>
+                          <a class="nav-link navbarDropdown" th:href="@{/mensajeria/bandejaNotificaciones/__${notificacion.id}__}">Ver detalle</a>
+                        </span> 
                       </ul>
                     </div>
                   </li>
+
                   <li style="display: flex; flex-direction:row; align-items:center;" class="nav-item">
                         <a id="usuario" class="nav-link active" style="display: flex; flex-direction:row; align-items:center;" href="#">
                           Usuario
                           <img id="imagen_usuario" src="img/icono-usuario.jpg" alt="" style="border-radius: 20px; width: 30px; height:30px; margin-left:7px;">
                         </a>
                   </li>
+
                   <div id="detalles-usuario">
                     <ul class="list-group">
                       <li class="list-group-item"><button type="button" class="btn btn-info">Ver más Info</button></li>
                       <li class="list-group-item">                      
                         <button type="button" class="btn btn-danger">
-                          <a class="nav-link navbarDropdown" th:href="@{/logout}"></a>Cerrar Sesión</a>
+                          <a class="nav-link navbarDropdown" th:href="@{/logout}">Cerrar Sesión</a>
                         </button>                        
                       </li>
                     </ul>
                   </div>
+
+                </ul>
               </div>
+
             </div>
         </nav>
         <div style="margin-bottom: 50px;"></div>
@@ -295,9 +311,9 @@
                   </form>
               </div>
             </div>
-          </div>
+        </div>
 
-          <footer th:replace= "~{/fragments/footer :: footer}"></footer>
+        <footer th:replace= "~{/fragments/footer :: footer}"></footer>
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

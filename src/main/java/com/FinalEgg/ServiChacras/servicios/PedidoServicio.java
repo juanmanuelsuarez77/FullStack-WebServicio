@@ -79,7 +79,7 @@ public class PedidoServicio {
     }
 
     @Transactional
-    public void agregarMensajear(String id, String idUsuario, String rolString, String contenido, MultipartFile archivo) throws MiExcepcion {
+    public void agregarMensajear(String id, String idUsuario, String idRemitente, String asunto, String rolString, String contenido, MultipartFile archivo) throws MiExcepcion {
         Optional<Pedido> optionalPedido = pedidoRepositorio.findById(id);
         
         if (optionalPedido.isPresent()) {
@@ -89,9 +89,9 @@ public class PedidoServicio {
             if (optionalUsuario.isPresent()) {
                 Usuario usuario = optionalUsuario.get();
                 List<Mensaje> listMensajes = pedido.getMensajes();
-            
+
                 try {
-                    Mensaje mensaje = mensajeServicio.crearMensaje(pedido, usuario, rolString, contenido, archivo);
+                    Mensaje mensaje = mensajeServicio.crearMensaje(idRemitente, asunto, pedido, usuario, rolString, contenido, archivo);
             
                     if (listMensajes == null) { listMensajes = new ArrayList<>(); }
             
@@ -137,11 +137,17 @@ public class PedidoServicio {
     public Pedido getOne(String id) { return pedidoRepositorio.getOne(id); }
 
     @Transactional(readOnly = true)
-    public List<Object> getPedidoPorClientes(String id) { return pedidoRepositorio.getPedidoPorClientes(id); }
+    public String getIdPedidoPorClientes(String id) { return pedidoRepositorio.getIdPedidoPorClientes(id); }
 
     @Transactional(readOnly = true)
-    public List<Object> getPedidoPorProveedores(String id) { return pedidoRepositorio.getPedidoPorProveedores(id); }
+    public List<Pedido> getPedidoPorClientes(String id) { return pedidoRepositorio.getPedidoPorClientes(id); }
 
     @Transactional(readOnly = true)
-    public List<Object> getPedidosPendiente() { return pedidoRepositorio.getPedidosPendiente(); }
+    public String getIdPedidoPorProveedores(String id) { return pedidoRepositorio.getIdPedidoPorProveedores(id); }
+
+    @Transactional(readOnly = true)
+    public List<Pedido> getPedidoPorProveedores(String id) { return pedidoRepositorio.getPedidoPorProveedores(id); }
+
+    @Transactional(readOnly = true)
+    public List<Pedido> getPedidosPendiente() { return pedidoRepositorio.getPedidosPendiente(); }
 }
