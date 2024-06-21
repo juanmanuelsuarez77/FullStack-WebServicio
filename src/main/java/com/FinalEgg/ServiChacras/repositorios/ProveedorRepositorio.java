@@ -17,8 +17,14 @@ public interface ProveedorRepositorio extends JpaRepository<Proveedor, String> {
        @Query("SELECT p FROM Proveedor p WHERE p.usuario.email = :email")
        public Proveedor getPorEmail(@Param("email") String email);
 
+       @Query("SELECT p FROM Proveedor p WHERE p.usuario.nombre LIKE %:nombreUsuario% OR p.usuario.apellido LIKE %:nombreUsuario%")
+       public List<Proveedor> getPorNombreCompleto(@Param("nombreUsuario") String nombreUsuario);
+
        @Query("SELECT p.servicio.id AS id_servicio FROM Proveedor p WHERE p.id = :idProveedor")
        public String getIdServicio(@Param("idProveedor") String idProveedor);
+
+       @Query("SELECT p FROM Proveedor p WHERE p.usuario.barrio = :barrio")
+       public List<Proveedor> getPorBarrio(@Param("barrio") String barrio);
 
        @Query("SELECT p FROM Proveedor p WHERE p.usuario.barrio = :barrio AND p.usuario.direccion = :direccion")
        public List<Proveedor> getPorDireccion(@Param("barrio") String barrio, @Param("direccion") String direccion);
@@ -36,4 +42,19 @@ public interface ProveedorRepositorio extends JpaRepository<Proveedor, String> {
        @Query("SELECT CONCAT(p.usuario.nombre, ' ', p.usuario.apellido) AS proveedor,"+
               " p.promPuntuacion FROM Proveedor p WHERE p.id = :idProveedor")
        public Integer getPuntuaciones(@Param("idProveedor") String idProveedor);
+
+       @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio AND "+
+              "(p.usuario.nombre LIKE %:nombreUsuario% OR p.usuario.apellido LIKE %:nombreUsuario%)")
+       public List<Proveedor> getPorServicioYNombre(@Param("nombreUsuario") String nombreUsuario, @Param("idServicio") String idServicio);
+
+       @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio AND p.usuario.barrio = :barrio")
+       public List<Proveedor> getPorServicioYBarrio(@Param("idServicio") String idServicio, @Param("barrio") String barrio);
+
+       @Query("SELECT p FROM Proveedor p WHERE p.usuario.barrio = :barrio AND "+
+              "(p.usuario.nombre LIKE %:nombreUsuario% OR p.usuario.apellido LIKE %:nombreUsuario%)")
+       public List<Proveedor> getPorBarrioYNombre(@Param("nombreUsuario") String nombreUsuario, @Param("barrio") String barrio);
+
+       @Query("SELECT p FROM Proveedor p WHERE p.servicio.id = :idServicio AND p.usuario.barrio = :barrio AND "+
+              "(p.usuario.nombre LIKE %:nombreUsuario% OR p.usuario.apellido LIKE %:nombreUsuario%)")
+       public List<Proveedor> getPorServicioBarrioYNombre(@Param("idServicio") String idServicio, @Param("nombreUsuario") String nombreUsuario, @Param("barrio") String barrio);
 }

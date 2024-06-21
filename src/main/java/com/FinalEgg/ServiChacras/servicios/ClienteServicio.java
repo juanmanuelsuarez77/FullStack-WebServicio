@@ -50,6 +50,12 @@ public class ClienteServicio {
     public Cliente getPorEmail(String email) { return clienteRepositorio.getPorEmail(email); }
 
     @Transactional(readOnly = true)
+    public List<Cliente> getPorBarrio(String barrio) { return clienteRepositorio.getPorBarrio(barrio); }
+
+    @Transactional(readOnly = true)
+    public List<Cliente> getPorNombreCompleto(String nombreUsuario) { return clienteRepositorio.getPorNombreCompleto(nombreUsuario); }
+
+    @Transactional(readOnly = true)
     public List<Cliente> getPorDireccion(String barrio, String direccion) { return clienteRepositorio.getPorDireccion(barrio, direccion); }
 
     @Transactional(readOnly = true)
@@ -60,4 +66,7 @@ public class ClienteServicio {
 
     @Transactional(readOnly = true)
     public List<Object> getComentarios(String id) { return clienteRepositorio.getComentarios(id); }
+
+    @Transactional(readOnly = true)
+    public List<Cliente> getPorBarrioYNombre(String nombreUsuario, String barrio) { return clienteRepositorio.getPorBarrioYNombre(nombreUsuario, barrio); }
 }

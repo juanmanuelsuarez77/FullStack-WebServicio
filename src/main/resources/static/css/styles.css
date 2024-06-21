@@ -37,12 +37,11 @@ h1 {
 
 .container {
     padding-top: 100px;
-    min-height: 700px;
 }
 
-/* #containerRegistro {
+#containerRegistro {
     min-height: 1000px;
-} */
+}
 
 #map {
     margin-top: 20px;
@@ -123,24 +122,6 @@ ul li {
     pointer-events: auto; /* Habilitar interacción */
 }
 
-#detalles-filtro {
-    position: absolute;
-    background: #202429;
-    border: 1px solid #202429;
-    border-radius: 5px;
-    width: 150px;
-    top: 80px;
-    right: 30vw;
-    height: 0px;
-    overflow: hidden;
-    pointer-events: none; /* Deshabilitar interacción */
-    transition: height 0.3s ease, pointer-events 0s 0.3s; /* Añadir transición para la altura */
-}
-
-#detalles-filtro.show {
-    height: auto;
-    pointer-events: auto; /* Habilitar interacción */
-}
 
 
 /*Contador de notificaciones*/
@@ -608,3 +589,32 @@ ul li {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
+
+#detalles-filtro {
+    position: absolute;
+    background: #202429;
+    border: 1px solid #202429;
+    border-radius: 5px;
+    width: 300px; /* Ajusta el ancho según sea necesario */
+    top: 80px;
+    right: 10px;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none; /* Deshabilitar interacción */
+    transition: height 0.3s ease, pointer-events 0s 0.3s; /* Transición para la altura y eventos de puntero */
+}
+
+#detalles-filtro.show {
+    height: auto;
+    pointer-events: auto; /* Habilitar interacción al mostrar */
+}
+
+#buscar {
+    display: block;
+    margin: 5px auto;
+}
+
+
+
+
+

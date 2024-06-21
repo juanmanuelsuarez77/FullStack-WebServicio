@@ -15,33 +15,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="/img/logo-barrios-cerrados-1.jpg" alt="Logo" style="width: 5vw;">
-            </a>
-        </div>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto me-4 mb-1 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/" id="navbarDropdown" role="button"
-                       aria-expanded="false">Inicio
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/registrar">Registro
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+    <!-- Navegador -->
+    <nav th:replace="~{/fragments/navbar :: nav}"></nav>
+    
     <div class="container mt-5 contLogin">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -69,6 +45,14 @@
                     </div>
                 </div>
             </div>
+
+            <section class="text-center container">
+                <div class="row mt-3">
+                    <div class="divVolver">
+                        <a th:href="@{/}" class="btn btn-secondary my-2 botonVolver botones">Volver</a>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 

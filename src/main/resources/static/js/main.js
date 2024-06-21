@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var clienteRadio = document.getElementById('cliente');
     var proveedorRadio = document.getElementById('proveedor');
     var mixtoRadio = document.getElementById('mixto');
-    var userRadio= document.getElementById('user');
+    var userRadio = document.getElementById('user');
     var tipoServicioDiv = document.getElementById('tipoServicio');
 
     function toggleTipoServicio() {
         if (proveedorRadio.checked || mixtoRadio.checked) {
-            tipoServicioDiv.style.display = 'block';            
+            tipoServicioDiv.style.display = 'block';
         } else {
             tipoServicioDiv.style.display = 'none';
         }
@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleTipoServicio();
 });
 
-document.getElementById("usuario").addEventListener('click', function() {
+document.getElementById("usuario").addEventListener('click', function () {
     let detallesUsuario = document.getElementById('detalles-usuario');
     let listItems = document.querySelectorAll('#detalles-usuario .list-group-item');
-    
+
     // Calcular la altura total de los elementos de la lista con un margen adicional
     let totalHeight = 0;
     listItems.forEach(item => {
@@ -41,10 +41,10 @@ document.getElementById("usuario").addEventListener('click', function() {
     }
 });
 
-document.getElementById("campana").addEventListener('click', function() {
+document.getElementById("campana").addEventListener('click', function () {
     let notificationPopup = document.getElementById('notification');
     let listItems = document.querySelectorAll('#notification .list-group-item');
-    
+
     // Calcular la altura total de los elementos de la lista con un margen adicional
     let totalHeight = 0;
     listItems.forEach(item => {
@@ -57,16 +57,16 @@ document.getElementById("campana").addEventListener('click', function() {
     if (notificationPopup.style.height == '0px') {
         notificationPopup.style.height = totalHeight + 'px';
         notificationPopup.classList.add('show');
-        document.querySelector('#campana .notification-bell .notification-count').textContent="0";
+        document.querySelector('#campana .notification-bell .notification-count').textContent = "0";
     } else {
         notificationPopup.style.height = '0';
         notificationPopup.classList.remove('show');
     }
 });
 
-let primeraVez=true;
+let primeraVez = true;
 
-document.getElementById("mensajes").addEventListener('click', function() {
+document.getElementById("mensajes").addEventListener('click', function () {
     let notificationPopup = document.getElementById('noti-mensajes');
     let listGroup = document.querySelector('#noti-mensajes .list-group');
 
@@ -80,20 +80,20 @@ document.getElementById("mensajes").addEventListener('click', function() {
             boton.textContent = proveedor;
             boton.classList.add('btn', 'btn-outline-light');
             boton.setAttribute('type', 'button');
-            boton.addEventListener("click", function() {
-                if(document.querySelector('.mensaje-container').style.display = 'none'){
+            boton.addEventListener("click", function () {
+                if (document.querySelector('.mensaje-container').style.display = 'none') {
                     document.querySelector('.mensaje-container').style.display = 'block';
                     document.getElementById('nombre-proveedor').textContent = boton.textContent;
-                } else{
+                } else {
                     document.getElementById('nombre-proveedor').textContent = boton.textContent;
                 }
             });
             li.append(boton);
             listGroup.append(li);
         });
-    primeraVez = false;
+        primeraVez = false;
     }
-    
+
     let listItems = document.querySelectorAll('#noti-mensajes .list-group-item');
 
     // Calcular la altura total de los elementos de la lista con un margen adicional
@@ -114,29 +114,8 @@ document.getElementById("mensajes").addEventListener('click', function() {
     }
 });
 
-document.getElementById("filtro").addEventListener('click', function() {
-    let detallesFiltro = document.getElementById('detalles-filtro');
-    let listItems = document.querySelectorAll('#detalles-filtro .list-group-item');
 
-    // Calcular la altura total de los elementos de la lista con un margen adicional
-    let totalHeight = 0;
-    listItems.forEach(item => {
-        totalHeight += item.clientHeight;
-    });
-
-    // Agregar un margen adicional para asegurar que todos los elementos se muestren completamente
-    totalHeight += 8; // Puedes ajustar este valor según sea necesario
-
-    if (detallesFiltro.style.height == '0px') {
-        detallesFiltro.style.height = totalHeight + 'px';
-        notificationPopup.classList.add('show');
-    } else {
-        detallesFiltro.style.height = '0';
-        notificationPopup.classList.remove('show');
-    }
-});
-
-document.getElementById("usuario-proveedor").addEventListener('click', function() {
+document.getElementById("usuario-proveedor").addEventListener('click', function () {
     let detallesUsuario = document.getElementById('detalles-proveedor');
     let listItems = document.querySelectorAll('#detalles-proveedor .list-group-item');
 
@@ -158,29 +137,29 @@ document.getElementById("usuario-proveedor").addEventListener('click', function(
     }
 });
 
-let cambiarFuncion= document.getElementById("cambiar-funcion");
+let cambiarFuncion = document.getElementById("cambiar-funcion");
 
-    cambiarFuncion.addEventListener('click', () => {
-    if(cambiarFuncion.textContent === "Trabajo completo"){
+cambiarFuncion.addEventListener('click', () => {
+    if (cambiarFuncion.textContent === "Trabajo completo") {
         cambiarFuncion.textContent = "Pagar";
         cambiarFuncion.classList.remove('btn-outline-success');
         cambiarFuncion.classList.add('btn-outline-warning');
-    }else if(cambiarFuncion.textContent === "Pagar"){
+    } else if (cambiarFuncion.textContent === "Pagar") {
         cambiarFuncion.textContent = "Calificar";
         cambiarFuncion.classList.remove('btn-outline-warning');
         cambiarFuncion.classList.add('btn-outline-success');
-    } else if(cambiarFuncion.textContent === "Calificar"){
+    } else if (cambiarFuncion.textContent === "Calificar") {
         cambiarFuncion.textContent = "Modificar Calificacion";
-    } else{
+    } else {
         cambiarFuncion.textContent = "Trabajo completo";
     }
 })
 
 document.querySelector('.controls .icon:nth-child(1)').addEventListener('click', () => {
-    if(document.querySelector('.controls .icon:nth-child(1)').textContent=="👇"){
-    document.querySelector('.controls .icon:nth-child(1)').textContent="👆";
-    } else{
-    document.querySelector('.controls .icon:nth-child(1)').textContent="👇";
+    if (document.querySelector('.controls .icon:nth-child(1)').textContent == "👇") {
+        document.querySelector('.controls .icon:nth-child(1)').textContent = "👆";
+    } else {
+        document.querySelector('.controls .icon:nth-child(1)').textContent = "👇";
     }
     const content = document.querySelector('.mensaje-content');
     const form = document.querySelector('.mensaje-form');
@@ -191,7 +170,7 @@ document.querySelector('.controls .icon:nth-child(1)').addEventListener('click',
 document.querySelector('.controls .icon:nth-child(2)').addEventListener('click', () => {
     document.querySelector('.mensaje-container').style.display = 'none';
 });
-          
+
 document.querySelector('.send').addEventListener('click', () => {
     const input = document.querySelector('.mensaje-form input[type="text"]');
     const mensaje = input.value.trim();
@@ -205,7 +184,7 @@ document.querySelector('.send').addEventListener('click', () => {
             const nuevoMensaje = document.createElement('div');
             nuevoMensaje.classList.add('mensaje', 'usuario');
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 nuevoMensaje.innerHTML = `<div class="texto"><img src="${e.target.result}" class="message-image" onclick="viewImage('${e.target.result}')"></div>`;
                 mensajeContent.appendChild(nuevoMensaje);
                 mensajeContent.scrollTop = mensajeContent.scrollHeight;
@@ -226,7 +205,7 @@ document.querySelector('.send').addEventListener('click', () => {
     fileInput.value = '';
     document.getElementById('preview-container').innerHTML = '';
 });
-          
+
 document.getElementById('file-upload').addEventListener('change', (event) => {
     const files = event.target.files;
     const previewContainer = document.getElementById('preview-container');
@@ -234,7 +213,7 @@ document.getElementById('file-upload').addEventListener('change', (event) => {
 
     Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const previewImage = document.createElement('div');
             previewImage.classList.add('preview-image');
             previewImage.innerHTML = `
@@ -248,7 +227,7 @@ document.getElementById('file-upload').addEventListener('change', (event) => {
 
     previewContainer.style.display = files.length > 0 ? 'flex' : 'none';
 });
-          
+
 document.getElementById('preview-container').addEventListener('click', (event) => {
     if (event.target.classList.contains('close-preview')) {
         const index = event.target.getAttribute('data-index');
@@ -274,31 +253,31 @@ function viewImage(src) {
     const viewer = document.getElementById('image-viewer');
     const viewerImage = document.getElementById('viewer-image');
     const downloadLink = document.getElementById('download-link');
-    
+
     viewerImage.src = src;
     downloadLink.href = src;
     viewer.style.display = 'flex';
 }
-        
-        
+
+
 
 // script.js
-document.getElementById("reportar").addEventListener('click', function() {
+document.getElementById("reportar").addEventListener('click', function () {
     document.getElementById('report-form-overlay').style.display = 'block';
     document.getElementById('report-form').style.display = 'block';
 });
 
-document.getElementById('report-form-overlay').addEventListener('click', function() {
+document.getElementById('report-form-overlay').addEventListener('click', function () {
     document.getElementById('report-form-overlay').style.display = 'none';
     document.getElementById('report-form').style.display = 'none';
 });
 
-document.querySelector('.report-header .close').addEventListener('click', function() {
+document.querySelector('.report-header .close').addEventListener('click', function () {
     document.getElementById('report-form-overlay').style.display = 'none';
     document.getElementById('report-form').style.display = 'none';
 });
 
-document.getElementById('formulario-reporte').addEventListener('submit', function(event) {
+document.getElementById('formulario-reporte').addEventListener('submit', function (event) {
     event.preventDefault();
     // Aquí puedes añadir la lógica para enviar el formulario
     // Luego de enviar el formulario, puedes cerrar el modal:
@@ -308,7 +287,7 @@ document.getElementById('formulario-reporte').addEventListener('submit', functio
 
 
 // Espera a que se cargue completamente la página
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Crear el elemento div con la clase "card"
     var cardDiv = document.createElement('div');
     cardDiv.classList.add('card');
@@ -390,4 +369,134 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Añadir la tarjeta creada al contenedor
     container.appendChild(cardDiv);
+});
+
+
+
+document.getElementById("filtro").addEventListener('click', function () {
+    let detallesFiltro = document.getElementById('detalles-filtro');
+    let listItems = document.querySelectorAll('#detalles-filtro .list-group-item');
+    let botonFiltro = document.getElementById('filtro');
+
+    // Calcular la altura total de los elementos de la lista con un margen adicional
+    let totalHeight = 0;
+    listItems.forEach(item => {
+        totalHeight += item.clientHeight;
+    });
+
+    // Agregar un margen adicional para asegurar que todos los elementos se muestren completamente
+    totalHeight += 58; // Puedes ajustar este valor según sea necesario
+
+    // Calcular la posición del botón y ajustar la posición del formulario
+    let rect = botonFiltro.getBoundingClientRect();
+    detallesFiltro.style.top = rect.bottom + 'px';
+    detallesFiltro.style.left = rect.left + 'px';
+
+    if (detallesFiltro.style.height == '0px' || detallesFiltro.style.height === '') {
+        detallesFiltro.style.height = totalHeight + 'px';
+        detallesFiltro.classList.add('show');
+    } else {
+        detallesFiltro.style.height = '0';
+        detallesFiltro.classList.remove('show');
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener los elementos del filtro y del contenedor de tarjetas
+    const filtroForm = document.getElementById('Formulario-filtro');
+    const cardContainer = document.getElementById('card-container');
+
+    // Datos simulados (deberías reemplazarlos con los datos reales)
+    const data = [
+        {
+            categoria: 'Ruta2km69',
+            title: 'Servicio 1',
+            imgSrc: 'ruta/a/la/imagen1.jpg',
+            description: 'Descripción del servicio 1',
+            items: ['Item 1', 'Item 2', 'Item 3'],
+            links: ['#', '#']
+        },
+        {
+            categoria: 'Ruta2km75',
+            title: 'Servicio 2',
+            imgSrc: 'ruta/a/la/imagen2.jpg',
+            description: 'Descripción del servicio 2',
+            items: ['Item 1', 'Item 2', 'Item 3'],
+            links: ['#', '#']
+        },
+        // Más datos aquí...
+    ];
+
+    // Función para generar las tarjetas
+    function generateCards(categoria) {
+        // Limpiar el contenedor de tarjetas
+        cardContainer.innerHTML = '';
+
+        // Filtrar los datos según la categoría seleccionada
+        const filteredData = data.filter(item => item.categoria === categoria);
+
+        // Generar las tarjetas
+        filteredData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.width = '18rem';
+
+            const img = document.createElement('img');
+            img.src = item.imgSrc;
+            img.className = 'card-img-top';
+            img.alt = item.title;
+
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+
+            const cardTitle = document.createElement('h5');
+            cardTitle.className = 'card-title';
+            cardTitle.textContent = item.title;
+
+            const cardText = document.createElement('p');
+            cardText.className = 'card-text';
+            cardText.textContent = item.description;
+
+            cardBody.appendChild(cardTitle);
+            cardBody.appendChild(cardText);
+
+            const listGroup = document.createElement('ul');
+            listGroup.className = 'list-group list-group-flush';
+
+            item.items.forEach(listItem => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = listItem;
+                listGroup.appendChild(li);
+            });
+
+            const cardBodyLinks = document.createElement('div');
+            cardBodyLinks.className = 'card-body';
+
+            item.links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link;
+                a.className = 'card-link';
+                a.textContent = 'Card link';
+                cardBodyLinks.appendChild(a);
+            });
+
+            card.appendChild(img);
+            card.appendChild(cardBody);
+            card.appendChild(listGroup);
+            card.appendChild(cardBodyLinks);
+
+            cardContainer.appendChild(card);
+        });
+    }
+
+    // Escuchar el evento submit del formulario del filtro
+    filtroForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(filtroForm);
+        const categoriaSeleccionada = formData.get('barrio'); // Ajusta el nombre según el select de tu filtro
+
+        generateCards(categoriaSeleccionada);
+    });
 });
