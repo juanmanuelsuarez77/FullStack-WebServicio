@@ -22,7 +22,7 @@ public class Proveedor {
     @JoinColumn(name ="id_usuario")
     private Usuario usuario;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name ="id_imagen")
     private Imagen imagen;
     private String descripcion;
@@ -37,6 +37,6 @@ public class Proveedor {
     @Column(name = "cantidad_pedidos")
     private Integer cantPedido;
 
-    @Column(name = "promedio_puntuación")
+    @Column(name = "promedio_puntuacion")
     private Integer promPuntuacion;
 }

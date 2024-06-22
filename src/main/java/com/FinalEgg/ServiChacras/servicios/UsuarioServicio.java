@@ -22,6 +22,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.FinalEgg.ServiChacras.repositorios.*;
 import com.FinalEgg.ServiChacras.entidades.Usuario;
 import com.FinalEgg.ServiChacras.entidades.Cliente;
+import com.FinalEgg.ServiChacras.entidades.Mensaje;
+import com.FinalEgg.ServiChacras.entidades.Notificacion;
 import com.FinalEgg.ServiChacras.entidades.Proveedor;
 import com.FinalEgg.ServiChacras.enumeraciones.Rol;
 import com.FinalEgg.ServiChacras.enumeraciones.Barrio;
@@ -37,8 +39,6 @@ public class UsuarioServicio implements UserDetailsService {
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ClienteRepositorio clienteRepositorio;
-    @Autowired
-    private ServicioRepositorio servicioRepositorio;
     @Autowired
     private ProveedorRepositorio proveedorRepositorio;
 
@@ -158,6 +158,17 @@ public class UsuarioServicio implements UserDetailsService {
 
             usuarioRepositorio.save(usuario);
         }
+    }
+
+    @Transactional
+    public void notificarUsuario(Usuario usuario, Notificacion notificacion) throws MiExcepcion {
+        List<Notificacion> listNotificaciones = usuario.getNotificaciones();
+
+        if (listNotificaciones == null) { listNotificaciones = new ArrayList<>(); }
+
+        listNotificaciones.add(notificacion); 
+        usuario.setNotificaciones(listNotificaciones);          
+        usuarioRepositorio.save(usuario);
     }
 
     private void validar(String email, String nombre, String apellido, String password, String password2) throws MiExcepcion {

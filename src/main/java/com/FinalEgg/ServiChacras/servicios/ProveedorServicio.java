@@ -1,17 +1,18 @@
 package com.FinalEgg.ServiChacras.servicios;
 
-import com.FinalEgg.ServiChacras.entidades.*;
-import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
-import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
-import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.FinalEgg.ServiChacras.entidades.*;
+import com.FinalEgg.ServiChacras.excepciones.MiExcepcion;
+import com.FinalEgg.ServiChacras.repositorios.ServicioRepositorio;
+import com.FinalEgg.ServiChacras.repositorios.ProveedorRepositorio;
 
 @Service
 public class ProveedorServicio {
@@ -43,7 +44,7 @@ public class ProveedorServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Proveedor> listarProveedors() { return proveedorRepositorio.findAll(); }
+    public List<Proveedor> listarProveedores() { return proveedorRepositorio.findAll(); }
 
     @Transactional
     public void actualizar(String id, Usuario usuario, MultipartFile archivo, String descripcion, String idServicio) throws MiExcepcion {
@@ -79,6 +80,12 @@ public class ProveedorServicio {
     public Proveedor getPorEmail(String email) { return proveedorRepositorio.getPorEmail(email); }
 
     @Transactional(readOnly = true)
+    public List<Proveedor> getPorNombreCompleto(String nombreUsuario) { return proveedorRepositorio.getPorNombreCompleto(nombreUsuario); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorBarrio(String barrio) { return proveedorRepositorio.getPorBarrio(barrio); }
+
+    @Transactional(readOnly = true)
     public List<Proveedor> getPorDireccion(String barrio, String direccion) { return proveedorRepositorio.getPorDireccion(barrio, direccion); }
 
     @Transactional(readOnly = true)
@@ -91,5 +98,17 @@ public class ProveedorServicio {
     public List<Object> getComentarios(String id) { return proveedorRepositorio.getComentarios(id); }
 
     @Transactional(readOnly = true)
-    public List<Object> getPuntuaciones(String id) { return proveedorRepositorio.getPuntuaciones(id); }
+    public Integer getPuntuaciones(String id) { return proveedorRepositorio.getPuntuaciones(id); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorServicioYNombre(String nombreUsuario, String idServicio) { return proveedorRepositorio.getPorServicioYNombre(nombreUsuario, idServicio); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorServicioYBarrio(String idServicio, String barrio) { return proveedorRepositorio.getPorServicioYBarrio(idServicio, barrio); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorBarrioYNombre(String nombreUsuario, String barrio) { return proveedorRepositorio.getPorBarrioYNombre(nombreUsuario, barrio); }
+
+    @Transactional(readOnly = true)
+    public List<Proveedor> getPorServicioBarrioYNombre(String idServicio, String nombreUsuario, String barrio) { return proveedorRepositorio.getPorServicioBarrioYNombre(idServicio, nombreUsuario, barrio); }
 }
